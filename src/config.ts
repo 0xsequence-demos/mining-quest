@@ -1,127 +1,46 @@
-import { KitConfig, createConfig, WalletType } from "@0xsequence/kit";
-import { type FC, createElement } from "react";
+import { KitConfig, createConfig } from "@0xsequence/kit";
 import { ChainId } from "@0xsequence/network";
-import { zeroAddress } from "viem";
+import SoneiumLogo from "./components/icons/SoneiumLogo";
 
-const searchParams = new URLSearchParams(location.search);
+export const DEMO_NFT_CONTRACT_ADDRESS =
+  "0x631980c251af5b4e71429ccc95f77155d75b89d4";
 
-// append ?debug to url to enable debug mode
-const isDebugMode = searchParams.has("debug");
-const projectAccessKey = isDebugMode
-  ? "AQAAAAAAAAK2JvvZhWqZ51riasWBftkrVXE"
-  : "AQAAAAAAAEGvyZiWA9FMslYeG_yayXaHnSI";
+const projectAccessKey = "AQAAAAAAAEGvyZiWA9FMslYeG_yayXaHnSI";
 const walletConnectProjectId = "c65a6cb1aa83c4e24500130f23a437d8";
-
-export const sponsoredContractAddresses: Record<number, `0x${string}`> = {
-  [ChainId.ARBITRUM_NOVA]: "0x37470dac8a0255141745906c972e414b1409b470",
-};
 
 export const kitConfig: KitConfig = {
   projectAccessKey,
   defaultTheme: "dark",
   signIn: {
     projectName: "Kit Demo",
-    useMock: isDebugMode,
   },
   displayedAssets: [
-    // Native token
+    // Demo nft
     {
-      contractAddress: zeroAddress,
-      chainId: ChainId.ARBITRUM_NOVA,
-    },
-    // Native token
-    {
-      contractAddress: zeroAddress,
+      contractAddress: DEMO_NFT_CONTRACT_ADDRESS,
       chainId: ChainId.ARBITRUM_SEPOLIA,
-    },
-    // Waas demo NFT
-    {
-      contractAddress: "0x0d402c63cae0200f0723b3e6fa0914627a48462e",
-      chainId: ChainId.ARBITRUM_NOVA,
-    },
-    // Waas demo NFT
-    {
-      contractAddress: "0x0d402c63cae0200f0723b3e6fa0914627a48462e",
-      chainId: ChainId.ARBITRUM_SEPOLIA,
-    },
-    // Skyweaver assets
-    {
-      contractAddress: "0x631998e91476da5b870d741192fc5cbc55f5a52e",
-      chainId: ChainId.POLYGON,
     },
   ],
-  readOnlyNetworks: [ChainId.OPTIMISM],
 };
 
 export const config = createConfig("waas", {
   ...kitConfig,
   appName: "Kit Demo",
-  chainIds: [
-    ChainId.ARBITRUM_NOVA,
-    ChainId.ARBITRUM_SEPOLIA,
-    ChainId.POLYGON,
-    ChainId.IMMUTABLE_ZKEVM,
-    ChainId.IMMUTABLE_ZKEVM_TESTNET,
-  ],
-  defaultChainId: ChainId.ARBITRUM_NOVA,
-  waasConfigKey: isDebugMode
-    ? "eyJwcm9qZWN0SWQiOjY5NCwicnBjU2VydmVyIjoiaHR0cHM6Ly9kZXYtd2Fhcy5zZXF1ZW5jZS5hcHAiLCJlbWFpbFJlZ2lvbiI6ImNhLWNlbnRyYWwtMSIsImVtYWlsQ2xpZW50SWQiOiI1NGF0bjV1cGk2M3FjNTlhMWVtM3ZiaHJzbiJ9"
-    : "eyJwcm9qZWN0SWQiOjE2ODE1LCJlbWFpbFJlZ2lvbiI6ImNhLWNlbnRyYWwtMSIsImVtYWlsQ2xpZW50SWQiOiI2N2V2NXVvc3ZxMzVmcGI2OXI3NnJoYnVoIiwicnBjU2VydmVyIjoiaHR0cHM6Ly93YWFzLnNlcXVlbmNlLmFwcCJ9",
-  enableConfirmationModal:
-    localStorage.getItem("confirmationEnabled") === "true",
+  chainIds: [ChainId.ARBITRUM_SEPOLIA],
+  defaultChainId: ChainId.ARBITRUM_SEPOLIA,
+  waasConfigKey:
+    "eyJwcm9qZWN0SWQiOjE2ODE1LCJlbWFpbFJlZ2lvbiI6ImNhLWNlbnRyYWwtMSIsImVtYWlsQ2xpZW50SWQiOiI2N2V2NXVvc3ZxMzVmcGI2OXI3NnJoYnVoIiwicnBjU2VydmVyIjoiaHR0cHM6Ly93YWFzLnNlcXVlbmNlLmFwcCJ9",
   email: false,
   ecosystem: {
-    walletUrl: "https://wallet.edenonline.xyz",
-    name: "Eden Online",
+    walletUrl: "https://wallet.soneium-demo.xyz",
+    name: "Soneium",
     projectAccessKey,
-    logoLight: (() => {
-      const LogoLight: FC<{
-        className?: string;
-        style?: React.CSSProperties;
-      }> = (props) =>
-        createElement("img", {
-          src: "https://ubi-static-website-hosting-prod.akamaized.net/whp-prod-bdf/prod/_next/static/media/eden-online-logo.6790e9f7.svg",
-          alt: "Logo Light",
-          ...props,
-        });
-      return LogoLight;
-    })(),
-    logoDark: (() => {
-      const LogoDark: FC<{
-        className?: string;
-        style?: React.CSSProperties;
-      }> = (props) =>
-        createElement("img", {
-          src: "https://ubi-static-website-hosting-prod.akamaized.net/whp-prod-bdf/prod/_next/static/media/eden-online-logo.6790e9f7.svg",
-          alt: "Logo Dark",
-          ...props,
-        });
-      return LogoDark;
-    })(),
-    defaultNetwork: ChainId.ARBITRUM_NOVA,
-    isDev: isDebugMode,
+    logoLight: SoneiumLogo,
+    logoDark: SoneiumLogo,
+    iconWidth: "100px",
+    defaultNetwork: ChainId.ARBITRUM_SEPOLIA,
   },
   walletConnect: {
     projectId: walletConnectProjectId,
-  },
-});
-
-export const getErc1155SaleContractConfig = (walletAddress: string) => ({
-  chain: 137,
-  // ERC20 token sale
-  contractAddress: "0xe65b75eb7c58ffc0bf0e671d64d0e1c6cd0d3e5b",
-  collectionAddress: "0xdeb398f41ccd290ee5114df7e498cf04fac916cb",
-  // Native token sale
-  // contractAddress: '0xf0056139095224f4eec53c578ab4de1e227b9597',
-  // collectionAddress: '0x92473261f2c26f2264429c451f70b0192f858795',
-  wallet: walletAddress,
-  items: [
-    {
-      tokenId: "1",
-      quantity: "1",
-    },
-  ],
-  onSuccess: () => {
-    console.log("success");
   },
 });
