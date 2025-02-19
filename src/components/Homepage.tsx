@@ -1,5 +1,13 @@
 import { FC, useState, useEffect } from "react";
-import { Button, Box, Text, Card, Spinner } from "@0xsequence/design-system";
+import {
+  Button,
+  Box,
+  Text,
+  Card,
+  Spinner,
+  Image,
+  truncateAddress,
+} from "@0xsequence/design-system";
 import { useKitWallets, useOpenConnectModal } from "@0xsequence/kit";
 import { useOpenWalletModal } from "@0xsequence/kit-wallet";
 import { arbitrumSepolia } from "viem/chains";
@@ -21,7 +29,7 @@ import PickAxe, { MintStatus } from "./3d/PickAxe";
 export const Homepage: FC = () => {
   const { setOpenConnectModal } = useOpenConnectModal();
   const { setOpenWalletModal } = useOpenWalletModal();
-  const { wallets, setActiveWallet, disconnectWallet } = useKitWallets();
+  const { wallets, disconnectWallet } = useKitWallets();
 
   const { address } = useAccount();
   const { data: walletClient } = useWalletClient();
@@ -41,7 +49,6 @@ export const Homepage: FC = () => {
     data: mintTxnData,
     isPending: isPendingMintTxn,
     writeContract,
-    reset: resetWriteContract,
   } = useWriteContract();
 
   const hasPickaxe = typeof nftBalance === "bigint" && nftBalance > 0n;
@@ -148,8 +155,10 @@ export const Homepage: FC = () => {
               <Box
                 style={{ display: "flex", alignItems: "center", gap: "12px" }}
               >
-                <Text color="text100">Connected:</Text>
-                <Text truncate>{address}</Text>
+                <Text color="text100" variant="medium">
+                  Wallet:
+                </Text>
+                <Text>{truncateAddress(address as string)}</Text>
               </Box>
               {address && (
                 <Box style={{ display: "flex", gap: "8px" }}>
@@ -229,6 +238,8 @@ export const Homepage: FC = () => {
           </Card>
         ) : (
           <Card
+            alignItems="center"
+            justifyContent="center"
             flexDirection="column"
             style={{
               padding: "24px",
@@ -236,12 +247,19 @@ export const Homepage: FC = () => {
             }}
           >
             <Text variant="large" style={{ marginBottom: "24px" }}>
-              Welcome to Mining Game
+              Welcome to Mining Quest
             </Text>
+            <Image
+              borderRadius="md"
+              width="full"
+              src="./cover.jpg"
+              alt="Mining Quest"
+            />
             <Button
-              label="Connect Your Wallet to Get Started"
+              marginTop="6"
+              label="Connect Wallet"
               onClick={() => setOpenConnectModal(true)}
-              size="large"
+              size="xlarge"
               variant="primary"
             />
           </Card>

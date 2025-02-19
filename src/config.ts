@@ -8,6 +8,10 @@ export const DEMO_NFT_CONTRACT_ADDRESS =
 const projectAccessKey = "AQAAAAAAAEGvyZiWA9FMslYeG_yayXaHnSI";
 const walletConnectProjectId = "c65a6cb1aa83c4e24500130f23a437d8";
 
+const urlParams = new URLSearchParams(window.location.search);
+const walletAppUrl =
+  urlParams.get("walletAppUrl") ?? "https://wallet.soneium-demo.xyz";
+
 export const kitConfig: KitConfig = {
   projectAccessKey,
   defaultTheme: "dark",
@@ -35,7 +39,7 @@ export const config = createConfig("waas", {
     descriptiveSocials: true,
   },
   ecosystem: {
-    walletUrl: "https://wallet.soneium-demo.xyz",
+    walletUrl: walletAppUrl,
     name: "Soneium",
     projectAccessKey,
     logoLight: SoneiumLogo,

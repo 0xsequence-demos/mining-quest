@@ -8,7 +8,6 @@ import {
   Group,
   Material,
   Mesh,
-  Object3D,
   Quaternion,
   Ray,
   Sphere,
@@ -46,13 +45,13 @@ function MiningGame() {
   const [pickaxePosition, setPickaxePosition] = useState(new Vector3());
   const [pickaxeQuaternion, setPickaxeQuaternion] = useState(new Quaternion());
   const [pickaxeAction, setPickaxeAction] = useState(0);
-  const myFlash = useRef<Object3D>();
-  const myPickaxe = useRef<Object3D>();
-  const myTunnel1 = useRef<Object3D>();
-  const myTunnel2 = useRef<Object3D>();
-  const myRailTie1 = useRef<Object3D>();
-  const myRailTie2 = useRef<Object3D>();
-  const myGroup = useRef<Group>();
+  const myFlash = useRef<Mesh>(null);
+  const myPickaxe = useRef<Group>(null);
+  const myTunnel1 = useRef<Group>(null);
+  const myTunnel2 = useRef<Group>(null);
+  const myRailTie1 = useRef<Group>(null);
+  const myRailTie2 = useRef<Group>(null);
+  const myGroup = useRef<Group>(null);
 
   useFrame((_state, delta) => {
     sharedNow = Date.now() * 0.001;
@@ -343,7 +342,7 @@ function MiningGame() {
         scale={[0.3, 0.3, 0.3]}
         rotation={[Math.PI * 0.5, 0, 0]}
         // scale={[1, 1, 1]}
-        geometry={nodesMine["flash"].geometry}
+        geometry={(nodesMine["flash"] as Mesh).geometry}
       >
         <meshBasicMaterial
           transparent
