@@ -75,10 +75,10 @@ export const Homepage: FC = () => {
     if (isPendingMintTxn) {
       setMintStatus("pending");
     } else if (mintTxnData) {
-      setMintStatus("successs");
       // add a bit of delay before setting the demo mode to play
-      setTimeout(() => {
-        refetchNftBalance();
+      setTimeout(async () => {
+        await refetchNftBalance();
+        setMintStatus("successs");
       }, 1500);
     }
   }, [isPendingMintTxn, mintTxnData]);
@@ -201,14 +201,28 @@ export const Homepage: FC = () => {
                   flexDirection="column"
                   gap="3"
                 >
-                  <Text>Mint a Pick Axe NFT to start mining.</Text>
-                  <Button
-                    label="Mint Pick Axe NFT"
-                    onClick={runMintNFT}
-                    isLoading={isPendingMintTxn}
-                    size="large"
-                    variant="primary"
-                  />
+                  {mintStatus === "pending" ? (
+                    <Box
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
+                      <Spinner size="small" />
+                      <Text>Minting...</Text>
+                    </Box>
+                  ) : (
+                    <>
+                      <Text>Mint a Pick Axe NFT to start mining.</Text>
+                      <Button
+                        label="Mint Pick Axe NFT"
+                        onClick={runMintNFT}
+                        size="large"
+                        variant="primary"
+                      />
+                    </>
+                  )}
                 </Box>
               )}
             </Box>

@@ -31,13 +31,16 @@ export const config = createConfig("waas", {
   waasConfigKey:
     "eyJwcm9qZWN0SWQiOjE2ODE1LCJlbWFpbFJlZ2lvbiI6ImNhLWNlbnRyYWwtMSIsImVtYWlsQ2xpZW50SWQiOiI2N2V2NXVvc3ZxMzVmcGI2OXI3NnJoYnVoIiwicnBjU2VydmVyIjoiaHR0cHM6Ly93YWFzLnNlcXVlbmNlLmFwcCJ9",
   email: false,
+  signIn: {
+    descriptiveSocials: true,
+  },
   ecosystem: {
     walletUrl: "https://wallet.soneium-demo.xyz",
     name: "Soneium",
     projectAccessKey,
     logoLight: SoneiumLogo,
     logoDark: SoneiumLogo,
-    iconWidth: "100px",
+    // iconWidth: "100px",
     defaultNetwork: ChainId.ARBITRUM_SEPOLIA,
   },
   walletConnect: {
