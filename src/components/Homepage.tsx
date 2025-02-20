@@ -7,6 +7,7 @@ import {
   Spinner,
   Image,
   truncateAddress,
+  useMediaQuery,
 } from "@0xsequence/design-system";
 import { useKitWallets, useOpenConnectModal } from "@0xsequence/kit";
 import { useOpenWalletModal } from "@0xsequence/kit-wallet";
@@ -27,6 +28,8 @@ import ItemViewer3D from "./3d/ItemViewer3D";
 import PickAxe, { MintStatus } from "./3d/PickAxe";
 
 export const Homepage: FC = () => {
+  const isMobile = useMediaQuery("isMobile");
+
   const { setOpenConnectModal } = useOpenConnectModal();
   const { setOpenWalletModal } = useOpenWalletModal();
   const { wallets, disconnectWallet } = useKitWallets();
@@ -138,17 +141,20 @@ export const Homepage: FC = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "24px",
+        padding: isMobile ? "12px" : "24px",
+        touchAction: "manipulation",
       }}
     >
-      <Box style={{ maxWidth: "800px" }}>
+      <Box style={{ maxWidth: isMobile ? "100vw" : "800px" }}>
         {wallets.length > 0 ? (
-          <Card style={{ padding: "24px" }}>
+          <Card style={{ padding: isMobile ? "12px" : "24px" }}>
             <Box
+              flexDirection={isMobile ? "column" : "row"}
+              gap={isMobile ? "2" : "0"}
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                alignItems: "center",
+                alignItems: isMobile ? "flex-start" : "center",
                 marginBottom: "24px",
               }}
             >
@@ -158,7 +164,7 @@ export const Homepage: FC = () => {
                 <Text color="text100" variant="medium">
                   Wallet:
                 </Text>
-                <Text>{truncateAddress(address as string)}</Text>
+                <Text>{truncateAddress(address as string, 4, 4)}</Text>
               </Box>
               {address && (
                 <Box style={{ display: "flex", gap: "8px" }}>
