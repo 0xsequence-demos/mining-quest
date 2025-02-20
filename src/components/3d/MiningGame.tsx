@@ -15,6 +15,12 @@ import {
 } from "three";
 import Rock from "./Rock";
 
+function allSame(arr: number[]) {
+  return arr.length > 0 && arr.every((val) => val === arr[0])
+    ? arr[0]
+    : undefined;
+}
+
 const chunkNames = ["xs", "s", "m", "l"];
 
 function lerp(a: number, b: number, mix: number) {
@@ -36,10 +42,18 @@ function indexToCoord(i: number) {
 const pickaxeHomePosition = new Vector3(0.75, -1.25, 2);
 const pickaxeHomeRotation = new Euler(0, -1.25, -0.75);
 const pickaxeHomeQuaternion = new Quaternion().setFromEuler(
-  pickaxeHomeRotation
+  pickaxeHomeRotation,
 );
 
-function MiningGame() {
+function MiningGame({
+  setSwing,
+  setBroken,
+  setDepth,
+}: {
+  setSwing: React.Dispatch<React.SetStateAction<number>>;
+  setBroken: React.Dispatch<React.SetStateAction<number>>;
+  setDepth: React.Dispatch<React.SetStateAction<number>>;
+}) {
   const { nodes: nodesPickaxe } = useGLTF("/pickaxe-iron.glb");
   const { nodes: nodesMine } = useGLTF("/rock-mine.glb");
   const [pickaxePosition, setPickaxePosition] = useState(new Vector3());
@@ -66,12 +80,12 @@ function MiningGame() {
       myPickaxe.current.position.lerpVectors(
         pickaxeHomePosition,
         pickaxePosition,
-        a
+        a,
       );
       myPickaxe.current.quaternion.slerpQuaternions(
         pickaxeHomeQuaternion,
         pickaxeQuaternion,
-        a
+        a,
       );
     }
     // const now = clock.getElapsedTime();
@@ -101,14 +115,19 @@ function MiningGame() {
     }
   });
   const [rockDepths, setRockDepths] = useState(
-    Array.from({ length: 16 }, () => 0)
+    Array.from({ length: 16 }, () => 0),
   );
+
+  if (allSame(rockDepths)) {
+    setDepth(rockDepths[0]);
+  }
+
   const [rockHighlights, setRockHighlights] = useState(
-    Array.from({ length: 16 }, () => false)
+    Array.from({ length: 16 }, () => false),
   );
 
   const [rockHealths, setRockHealths] = useState(
-    Array.from({ length: 16 }, () => 3)
+    Array.from({ length: 16 }, () => 3),
   );
 
   const [ray, setRay] = useState<Ray>();
@@ -143,7 +162,7 @@ function MiningGame() {
         flashPos: tempFlashPos,
       };
     },
-    [rockDepths]
+    [rockDepths],
   );
 
   const makeChunks = useCallback(
@@ -162,13 +181,13 @@ function MiningGame() {
         meshPrize.rotation.set(
           Math.random() * 7,
           Math.random() * 7,
-          Math.random() * 7
+          Math.random() * 7,
         );
         meshPrize.userData.origRot = meshPrize.rotation.clone();
         meshPrize.userData.spin = new Vector3(
           Math.random() - 0.5,
           Math.random() - 0.5,
-          Math.random() - 0.5
+          Math.random() - 0.5,
         );
         meshPrize.position.set(x, y, depth);
         meshPrize.userData.origPos = meshPrize.position.clone();
@@ -183,22 +202,22 @@ function MiningGame() {
           meshPrize.position.x = lerp(
             meshPrize.userData.origPos.x,
             meshPrize.userData.spreadVecX,
-            elapsed
+            elapsed,
           );
           meshPrize.position.y = lerp(
             meshPrize.userData.origPos.y,
             meshPrize.userData.spreadVecY,
-            elapsed
+            elapsed,
           );
           meshPrize.position.y = lerp(
             meshPrize.position.y,
             -meshPrize.userData.origPos.y * 4 - 16,
-            elapsed * elapsed
+            elapsed * elapsed,
           );
           meshPrize.position.x = lerp(
             meshPrize.position.x,
             0,
-            elapsed * elapsed
+            elapsed * elapsed,
           );
           meshPrize.rotation.copy(meshPrize.userData.origRot);
           meshPrize.rotation.x += meshPrize.userData.spin.x * elapsed * 30;
@@ -212,7 +231,7 @@ function MiningGame() {
         }, 500);
       }
     },
-    [nodesMine, rockDepths]
+    [nodesMine, rockDepths],
   );
 
   useEffect(() => {
@@ -284,10 +303,12 @@ function MiningGame() {
           if (info.candidates.length > 0) {
             if (cracked) {
               [sfxHeavy1, sfxHeavy2][~~(Math.random() * 2)]();
+              setBroken((current) => (current += 1));
             } else if (info.candidates.length === 1) {
               [sfxLight1, sfxLight2, sfxLight3, sfxLight4][
                 ~~(Math.random() * 4)
               ]();
+              setSwing((c) => (c += 1));
             } else {
               [
                 sfxMedium1,
@@ -297,6 +318,7 @@ function MiningGame() {
                 sfxMedium5,
                 sfxMedium6,
               ][~~(Math.random() * 6)]();
+              setSwing((c) => (c += 1));
             }
             if (myFlash.current) {
               myFlash.current.scale.setScalar(0.5);
@@ -304,6 +326,7 @@ function MiningGame() {
             }
             setRockHealths(rockHealths.slice());
             setRockDepths(rockDepths.slice());
+
             const mpa = myPickaxe.current;
             if (mpa) {
               mpa.position.copy(info.flashPos);
@@ -321,9 +344,8 @@ function MiningGame() {
       >
         <planeGeometry args={[10, 10, 1, 1]} />
         <meshStandardMaterial
-          color="green"
+          // className="text-green"
           transparent
-          opacity={0.15}
           visible={false}
         />
       </mesh>
