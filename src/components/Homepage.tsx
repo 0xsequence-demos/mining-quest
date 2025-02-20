@@ -169,9 +169,7 @@ export const Homepage: FC = () => {
               <Box
                 style={{ display: "flex", alignItems: "center", gap: "12px" }}
               >
-                <Text color="text100" variant="medium">
-                  Wallet:
-                </Text>
+                <Text variant="medium">Wallet:</Text>
                 <Text>{truncateAddress(address as string, 4, 4)}</Text>
               </Box>
               {address && (
