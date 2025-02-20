@@ -98,7 +98,9 @@ export const Homepage: FC = () => {
 
   const [demoMode, setDemoMode] = useState<"mint" | "play">("mint");
   const [isCheckingWallet, setIsCheckingWallet] = useState(true);
-
+  const [swing, setSwing] = useState(0);
+  const [broken, setBroken] = useState(0);
+  const [depth, setDepth] = useState(0);
   // Check wallet connection after a delay
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -163,14 +165,20 @@ export const Homepage: FC = () => {
               )}
               <View3D env={demoMode === "play" ? "mine" : "item"}>
                 {demoMode === "play" ? (
-                  <MiningGame />
+                  <MiningGame
+                    setSwing={setSwing}
+                    setBroken={setBroken}
+                    setDepth={setDepth}
+                  />
                 ) : (
                   <ItemViewer3D>
                     <PickAxe mintStatus={mintStatus} />
                   </ItemViewer3D>
                 )}
               </View3D>
-
+              {hasPickaxe ? (
+                <Hud swing={swing} broken={broken} depth={depth} />
+              ) : null}
               <Minting
                 hasPickaxe={hasPickaxe}
                 mintStatus={mintStatus}
@@ -272,6 +280,30 @@ function Minting({
   );
 }
 
+function Hud({
+  swing,
+  broken,
+  depth,
+}: {
+  swing: number;
+  broken: number;
+  depth: number;
+}) {
+  return (
+    <div className="absolute bottom-[2rem] bg-black p-2 md:p-4  max-w-[90%] md:max-w-[80%] data-[visible='false']:opacity-0 transition-all data-[visible='false']:translate-y-12 pointer-events-none flex gap-9 text-[8px] md:text-[10px]">
+      <span>
+        Swings <span className="text-green-500">[{swing}]</span>
+      </span>
+      <span>
+        Broken <span className="text-green-500">[{broken}]</span>
+      </span>
+      <span>
+        Depth <span className="text-green-500">[{depth}]</span>
+      </span>
+    </div>
+  );
+}
+
 function ReadyToMine() {
   const [isVisible, setIsVisible] = useState(true);
 
@@ -283,7 +315,7 @@ function ReadyToMine() {
 
   return (
     <div
-      className="absolute bottom-[4rem] bg-black p-4 flex flex-col gap-2 max-w-[80%] data-[visible='false']:opacity-0 transition-all data-[visible='false']:translate-y-12 pointer-events-none"
+      className="absolute bottom-[6rem] bg-black p-4 flex flex-col gap-2 max-w-[80%] data-[visible='false']:opacity-0 transition-all data-[visible='false']:translate-y-12 pointer-events-none"
       data-visible={isVisible}
     >
       Ready to mine!

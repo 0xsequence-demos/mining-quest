@@ -15,6 +15,12 @@ import {
 } from "three";
 import Rock from "./Rock";
 
+function allSame(arr: number[]) {
+  return arr.length > 0 && arr.every((val) => val === arr[0])
+    ? arr[0]
+    : undefined;
+}
+
 const chunkNames = ["xs", "s", "m", "l"];
 
 function lerp(a: number, b: number, mix: number) {
@@ -39,7 +45,15 @@ const pickaxeHomeQuaternion = new Quaternion().setFromEuler(
   pickaxeHomeRotation,
 );
 
-function MiningGame() {
+function MiningGame({
+  setSwing,
+  setBroken,
+  setDepth,
+}: {
+  setSwing: React.Dispatch<React.SetStateAction<number>>;
+  setBroken: React.Dispatch<React.SetStateAction<number>>;
+  setDepth: React.Dispatch<React.SetStateAction<number>>;
+}) {
   const { nodes: nodesPickaxe } = useGLTF("/pickaxe-iron.glb");
   const { nodes: nodesMine } = useGLTF("/rock-mine.glb");
   const [pickaxePosition, setPickaxePosition] = useState(new Vector3());
@@ -103,6 +117,11 @@ function MiningGame() {
   const [rockDepths, setRockDepths] = useState(
     Array.from({ length: 16 }, () => 0),
   );
+
+  if (allSame(rockDepths)) {
+    setDepth(rockDepths[0]);
+  }
+
   const [rockHighlights, setRockHighlights] = useState(
     Array.from({ length: 16 }, () => false),
   );
@@ -284,10 +303,12 @@ function MiningGame() {
           if (info.candidates.length > 0) {
             if (cracked) {
               [sfxHeavy1, sfxHeavy2][~~(Math.random() * 2)]();
+              setBroken((current) => (current += 1));
             } else if (info.candidates.length === 1) {
               [sfxLight1, sfxLight2, sfxLight3, sfxLight4][
                 ~~(Math.random() * 4)
               ]();
+              setSwing((c) => (c += 1));
             } else {
               [
                 sfxMedium1,
@@ -297,6 +318,7 @@ function MiningGame() {
                 sfxMedium5,
                 sfxMedium6,
               ][~~(Math.random() * 6)]();
+              setSwing((c) => (c += 1));
             }
             if (myFlash.current) {
               myFlash.current.scale.setScalar(0.5);
@@ -304,6 +326,7 @@ function MiningGame() {
             }
             setRockHealths(rockHealths.slice());
             setRockDepths(rockDepths.slice());
+
             const mpa = myPickaxe.current;
             if (mpa) {
               mpa.position.copy(info.flashPos);
