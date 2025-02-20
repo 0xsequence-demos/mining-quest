@@ -145,7 +145,12 @@ export const Homepage: FC = () => {
         touchAction: "manipulation",
       }}
     >
-      <Box style={{ maxWidth: isMobile ? "100vw" : "800px" }}>
+      <Box
+        style={{
+          maxWidth: isMobile ? "100vw" : "800px",
+          minWidth: isMobile ? "100vw" : "800px",
+        }}
+      >
         {wallets.length > 0 ? (
           <Card style={{ padding: isMobile ? "12px" : "24px" }}>
             <Box
@@ -206,7 +211,12 @@ export const Homepage: FC = () => {
 
             <Box style={{ display: "flex", justifyContent: "center" }}>
               {hasPickaxe ? (
-                <Text variant="medium" weight="bold" color="positive">
+                <Text
+                  variant="medium"
+                  weight="bold"
+                  color="positive"
+                  style={{ userSelect: "none" }}
+                >
                   Ready to mine!
                 </Text>
               ) : (
@@ -258,7 +268,7 @@ export const Homepage: FC = () => {
             <Image
               borderRadius="md"
               width="full"
-              src="./cover.jpg"
+              src="./cover.webp"
               alt="Mining Quest"
             />
             <Button

@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@0xsequence/design-system": "^1.9.0",
-    "@0xsequence/kit": "^4.6.3-beta.2",
-    "@0xsequence/kit-wallet": "^4.6.3-beta.2",
+    "@0xsequence/kit": "^4.6.3-beta.3",
+    "@0xsequence/kit-wallet": "^4.6.3-beta.3",
     "@0xsequence/network": ">= 2.2.13",
     "@0xsequence/waas": ">= 2.2.13",
     "@react-spring/three": "^9.7.5",
