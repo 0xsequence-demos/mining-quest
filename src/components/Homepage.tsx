@@ -80,6 +80,8 @@ export const Homepage: FC = () => {
     }
   };
 
+  const [mintStatus, setMintStatus] = useState<MintStatus>("notStarted");
+
   // Handle mint transaction status changes
   useEffect(() => {
     if (isPendingMintTxn) {
@@ -90,10 +92,11 @@ export const Homepage: FC = () => {
         await refetchNftBalance();
         setMintStatus("successs");
       }, 1500);
+    } else if (!isPendingMintTxn && !mintTxnData && mintStatus === "pending") {
+      // If we were pending but now we're not, and there's no transaction data, it failed
+      setMintStatus("failed");
     }
-  }, [isPendingMintTxn, mintTxnData]);
-
-  const [mintStatus, setMintStatus] = useState<MintStatus>("notStarted");
+  }, [isPendingMintTxn, mintTxnData, mintStatus]);
 
   // Set demo mode based on pickaxe ownership
   useEffect(() => {
@@ -239,13 +242,29 @@ export const Homepage: FC = () => {
                     </Box>
                   ) : (
                     <>
-                      <Text>Mint a Pick Axe NFT to start mining.</Text>
-                      <Button
-                        label="Mint Pick Axe NFT"
-                        onClick={runMintNFT}
-                        size="large"
-                        variant="primary"
-                      />
+                      {mintStatus === "failed" ? (
+                        <>
+                          <Text color="negative" marginBottom="2">
+                            Minting failed. Please try again.
+                          </Text>
+                          <Button
+                            label="Retry Mint"
+                            onClick={runMintNFT}
+                            size="large"
+                            variant="primary"
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <Text>Mint a Pick Axe NFT to start mining.</Text>
+                          <Button
+                            label="Mint Pick Axe NFT"
+                            onClick={runMintNFT}
+                            size="large"
+                            variant="primary"
+                          />
+                        </>
+                      )}
                     </>
                   )}
                 </Box>
