@@ -1,14 +1,5 @@
 import { FC, useState, useEffect } from "react";
-import {
-  Button,
-  Box,
-  Text,
-  Card,
-  Spinner,
-  Image,
-  truncateAddress,
-  useMediaQuery,
-} from "@0xsequence/design-system";
+import { Text, Spinner, truncateAddress } from "@0xsequence/design-system";
 import { useKitWallets, useOpenConnectModal } from "@0xsequence/kit";
 import { useOpenWalletModal } from "@0xsequence/kit-wallet";
 import { arbitrumSepolia } from "viem/chains";
@@ -28,8 +19,6 @@ import ItemViewer3D from "./3d/ItemViewer3D";
 import PickAxe, { MintStatus } from "./3d/PickAxe";
 
 export const Homepage: FC = () => {
-  const isMobile = useMediaQuery("isMobile");
-
   const { setOpenConnectModal } = useOpenConnectModal();
   const { setOpenWalletModal } = useOpenWalletModal();
   const { wallets, disconnectWallet } = useKitWallets();
@@ -121,7 +110,7 @@ export const Homepage: FC = () => {
   // Show loading state while checking wallet or NFT balance
   if (isCheckingWallet || (wallets.length > 0 && isLoadingNFT)) {
     return (
-      <Box
+      <div
         style={{
           width: "100%",
           minHeight: "100vh",
@@ -132,73 +121,46 @@ export const Homepage: FC = () => {
         }}
       >
         <Spinner size="large" />
-      </Box>
+      </div>
     );
   }
 
   return (
-    <Box
-      style={{
-        width: "100vw",
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: isMobile ? "12px" : "24px",
-        touchAction: "manipulation",
-      }}
-    >
-      <Box
-        style={{
-          maxWidth: isMobile ? "100vw" : "800px",
-          minWidth: isMobile ? "100vw" : "800px",
-        }}
-      >
-        {wallets.length > 0 ? (
-          <Card style={{ padding: isMobile ? "12px" : "24px" }}>
-            <Box
-              flexDirection={isMobile ? "column" : "row"}
-              gap={isMobile ? "2" : "0"}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: isMobile ? "flex-start" : "center",
-                marginBottom: "24px",
-              }}
-            >
-              <Box
-                style={{ display: "flex", alignItems: "center", gap: "12px" }}
-              >
-                <Text variant="medium">Wallet:</Text>
-                <Text>{truncateAddress(address as string, 4, 4)}</Text>
-              </Box>
+    <div className="flex flex-1 items-center justify-center w-full h-full">
+      <div className="relative w-full aspect-square md:aspect-[1.31/1] md:max-w-screen-lg">
+        <img
+          src="/tvframe.webp"
+          className="object-cover relative pointer-events-none z-10 hidden md:block"
+        />
+        <div
+          className="md:w-[60%] md:h-[67%] md:absolute md:left-[8.64%] md:top-[12.17%] size-full md:size-auto z-1 bg-neutral-600 flex flex-col items-center justify-end"
+          data-id="screen"
+        >
+          {wallets.length > 0 ? (
+            <>
               {address && (
-                <Box style={{ display: "flex", gap: "8px" }}>
-                  <Button
-                    label="Inventory"
-                    onClick={() => setOpenWalletModal(true)}
-                    variant="secondary"
-                    size="small"
-                  />
-                  <Button
-                    label="Disconnect"
-                    onClick={() => disconnectWallet(address)}
-                    variant="secondary"
-                    size="small"
-                  />
-                </Box>
+                <>
+                  <div className="absolute top-0 z-1 w-full pt-6 text-[10px] md:text-[12px] font-medium flex justify-center gap-1 md:gap-2 ">
+                    <button
+                      type="button"
+                      onClick={() => setOpenWalletModal(true)}
+                      className="cursor-pointer hover:bg-white hover:text-black bg-black px-2 whitespace-nowrap"
+                    >
+                      [ Inventory ]
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => disconnectWallet(address)}
+                      className="cursor-pointer hover:bg-white hover:text-black bg-black px-2 whitespace-nowrap"
+                    >
+                      [ Disconnect ]
+                    </button>
+                  </div>
+                  <div className="absolute bottom-0 z-1 w-full pb-2 text-[10px] md:text-[12px] font-medium flex justify-center gap-1 md:gap-2 ">
+                    {truncateAddress(address as string, 4, 4)}
+                  </div>
+                </>
               )}
-            </Box>
-
-            <Box
-              style={{
-                position: "relative",
-                height: "400px",
-                marginBottom: "24px",
-                borderRadius: "12px",
-                overflow: "hidden",
-              }}
-            >
               <View3D env={demoMode === "play" ? "mine" : "item"}>
                 {demoMode === "play" ? (
                   <MiningGame />
@@ -208,96 +170,123 @@ export const Homepage: FC = () => {
                   </ItemViewer3D>
                 )}
               </View3D>
-            </Box>
 
-            <Box style={{ display: "flex", justifyContent: "center" }}>
-              {hasPickaxe ? (
-                <Text
-                  variant="medium"
-                  weight="bold"
-                  color="positive"
-                  style={{ userSelect: "none" }}
-                >
-                  Ready to mine!
-                </Text>
-              ) : (
-                <Box
-                  alignItems="center"
-                  justifyContent="center"
-                  flexDirection="column"
-                  gap="3"
-                >
-                  {mintStatus === "pending" ? (
-                    <Box
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                      }}
-                    >
-                      <Spinner size="small" />
-                      <Text>Minting...</Text>
-                    </Box>
-                  ) : (
-                    <>
-                      {mintStatus === "failed" ? (
-                        <>
-                          <Text color="negative" marginBottom="2">
-                            Minting failed. Please try again.
-                          </Text>
-                          <Button
-                            label="Retry Mint"
-                            onClick={runMintNFT}
-                            size="large"
-                            variant="primary"
-                          />
-                        </>
-                      ) : (
-                        <>
-                          <Text>Mint a Pick Axe NFT to start mining.</Text>
-                          <Button
-                            label="Mint Pick Axe NFT"
-                            onClick={runMintNFT}
-                            size="large"
-                            variant="primary"
-                          />
-                        </>
-                      )}
-                    </>
-                  )}
-                </Box>
-              )}
-            </Box>
-          </Card>
-        ) : (
-          <Card
-            alignItems="center"
-            justifyContent="center"
-            flexDirection="column"
-            style={{
-              padding: "24px",
-              textAlign: "center",
-            }}
-          >
-            <Text variant="large" style={{ marginBottom: "24px" }}>
-              Welcome to Mining Quest
-            </Text>
-            <Image
-              borderRadius="md"
-              width="full"
-              src="./cover.webp"
-              alt="Mining Quest"
-            />
-            <Button
-              marginTop="6"
-              label="Connect Wallet"
-              onClick={() => setOpenConnectModal(true)}
-              size="xlarge"
-              variant="primary"
-            />
-          </Card>
-        )}
-      </Box>
-    </Box>
+              <Minting
+                hasPickaxe={hasPickaxe}
+                mintStatus={mintStatus}
+                runMintNFT={runMintNFT}
+              />
+            </>
+          ) : (
+            <LoginScreen setOpenConnectModal={setOpenConnectModal} />
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
+
+function LoginScreen({
+  setOpenConnectModal,
+}: {
+  setOpenConnectModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  return (
+    <>
+      <img
+        src="/miningquest.webp"
+        className="absolute size-full inset-0 object-cover"
+      />
+      <div className="relative mb-16">
+        <button
+          type="button"
+          onClick={() => setOpenConnectModal(true)}
+          className="cursor-pointer hover:bg-white hover:text-black px-2 underline text-[12px] md:text-[14px]"
+        >
+          [ Connect Wallet ]
+        </button>
+      </div>
+    </>
+  );
+}
+
+function Minting({
+  hasPickaxe,
+  mintStatus,
+  runMintNFT,
+}: {
+  hasPickaxe: boolean;
+  mintStatus: MintStatus;
+  runMintNFT: () => Promise<void>;
+}) {
+  return (
+    <>
+      {hasPickaxe ? (
+        <ReadyToMine />
+      ) : (
+        <div className="absolute bottom-[4rem] bg-black p-4 flex flex-col gap-2 max-w-[80%] md:text-[14px] text-[12px]">
+          <div className="flex items-center justify-center flex-col gap-3">
+            {mintStatus === "pending" ? (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                <span>Minting...</span>
+              </div>
+            ) : (
+              <>
+                {mintStatus === "failed" ? (
+                  <>
+                    <Text className="mb-2" color="negative">
+                      Minting failed. Please try again.
+                    </Text>
+                    <button
+                      type="button"
+                      onClick={runMintNFT}
+                      className="cursor-pointer hover:bg-white hover:text-black px-2 underline"
+                    >
+                      [ Retry Mint ]
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    Mint a Pick Axe NFT to start mining.
+                    <button
+                      type="button"
+                      onClick={runMintNFT}
+                      className="cursor-pointer hover:bg-white hover:text-black px-2 underline"
+                    >
+                      [ Mint Pick Axe NFT ]
+                    </button>
+                  </>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+function ReadyToMine() {
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsVisible(false);
+    }, 1000);
+  }, []);
+
+  return (
+    <div
+      className="absolute bottom-[4rem] bg-black p-4 flex flex-col gap-2 max-w-[80%] data-[visible='false']:opacity-0 transition-all data-[visible='false']:translate-y-12 pointer-events-none"
+      data-visible={isVisible}
+    >
+      Ready to mine!
+    </div>
+  );
+}

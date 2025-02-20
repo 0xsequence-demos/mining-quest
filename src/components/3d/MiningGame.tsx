@@ -36,7 +36,7 @@ function indexToCoord(i: number) {
 const pickaxeHomePosition = new Vector3(0.75, -1.25, 2);
 const pickaxeHomeRotation = new Euler(0, -1.25, -0.75);
 const pickaxeHomeQuaternion = new Quaternion().setFromEuler(
-  pickaxeHomeRotation
+  pickaxeHomeRotation,
 );
 
 function MiningGame() {
@@ -66,12 +66,12 @@ function MiningGame() {
       myPickaxe.current.position.lerpVectors(
         pickaxeHomePosition,
         pickaxePosition,
-        a
+        a,
       );
       myPickaxe.current.quaternion.slerpQuaternions(
         pickaxeHomeQuaternion,
         pickaxeQuaternion,
-        a
+        a,
       );
     }
     // const now = clock.getElapsedTime();
@@ -101,14 +101,14 @@ function MiningGame() {
     }
   });
   const [rockDepths, setRockDepths] = useState(
-    Array.from({ length: 16 }, () => 0)
+    Array.from({ length: 16 }, () => 0),
   );
   const [rockHighlights, setRockHighlights] = useState(
-    Array.from({ length: 16 }, () => false)
+    Array.from({ length: 16 }, () => false),
   );
 
   const [rockHealths, setRockHealths] = useState(
-    Array.from({ length: 16 }, () => 3)
+    Array.from({ length: 16 }, () => 3),
   );
 
   const [ray, setRay] = useState<Ray>();
@@ -143,7 +143,7 @@ function MiningGame() {
         flashPos: tempFlashPos,
       };
     },
-    [rockDepths]
+    [rockDepths],
   );
 
   const makeChunks = useCallback(
@@ -162,13 +162,13 @@ function MiningGame() {
         meshPrize.rotation.set(
           Math.random() * 7,
           Math.random() * 7,
-          Math.random() * 7
+          Math.random() * 7,
         );
         meshPrize.userData.origRot = meshPrize.rotation.clone();
         meshPrize.userData.spin = new Vector3(
           Math.random() - 0.5,
           Math.random() - 0.5,
-          Math.random() - 0.5
+          Math.random() - 0.5,
         );
         meshPrize.position.set(x, y, depth);
         meshPrize.userData.origPos = meshPrize.position.clone();
@@ -183,22 +183,22 @@ function MiningGame() {
           meshPrize.position.x = lerp(
             meshPrize.userData.origPos.x,
             meshPrize.userData.spreadVecX,
-            elapsed
+            elapsed,
           );
           meshPrize.position.y = lerp(
             meshPrize.userData.origPos.y,
             meshPrize.userData.spreadVecY,
-            elapsed
+            elapsed,
           );
           meshPrize.position.y = lerp(
             meshPrize.position.y,
             -meshPrize.userData.origPos.y * 4 - 16,
-            elapsed * elapsed
+            elapsed * elapsed,
           );
           meshPrize.position.x = lerp(
             meshPrize.position.x,
             0,
-            elapsed * elapsed
+            elapsed * elapsed,
           );
           meshPrize.rotation.copy(meshPrize.userData.origRot);
           meshPrize.rotation.x += meshPrize.userData.spin.x * elapsed * 30;
@@ -212,7 +212,7 @@ function MiningGame() {
         }, 500);
       }
     },
-    [nodesMine, rockDepths]
+    [nodesMine, rockDepths],
   );
 
   useEffect(() => {
@@ -321,9 +321,8 @@ function MiningGame() {
       >
         <planeGeometry args={[10, 10, 1, 1]} />
         <meshStandardMaterial
-          color="green"
+          // className="text-green"
           transparent
-          opacity={0.15}
           visible={false}
         />
       </mesh>
