@@ -2,10 +2,9 @@ import { FC, useState, useEffect } from "react";
 import { Text, Spinner, truncateAddress } from "@0xsequence/design-system";
 import { useKitWallets, useOpenConnectModal } from "@0xsequence/kit";
 import { useOpenWalletModal } from "@0xsequence/kit-wallet";
-import { arbitrumSepolia } from "viem/chains";
+
 import {
   useAccount,
-  useSwitchChain,
   useWalletClient,
   useWriteContract,
   useReadContract,
@@ -25,7 +24,7 @@ export const Homepage: FC = () => {
 
   const { address } = useAccount();
   const { data: walletClient } = useWalletClient();
-  const { switchChainAsync } = useSwitchChain();
+
   const {
     data: nftBalance,
     isLoading: isLoadingNFT,
