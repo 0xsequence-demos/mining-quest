@@ -53,10 +53,6 @@ export const Homepage: FC = () => {
     try {
       setMintStatus("pending");
 
-      await switchChainAsync({
-        chainId: arbitrumSepolia.id,
-      });
-
       writeContract({
         address: DEMO_NFT_CONTRACT_ADDRESS,
         abi: NFT_ABI,

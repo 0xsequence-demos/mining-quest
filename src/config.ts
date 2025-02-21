@@ -3,7 +3,7 @@ import { ChainId } from "@0xsequence/network";
 import SoneiumLogo from "./components/icons/SoneiumLogo";
 
 export const DEMO_NFT_CONTRACT_ADDRESS =
-  "0x631980c251af5b4e71429ccc95f77155d75b89d4";
+  "0x5bcbc265a86fda3502e12cf17947445f7fd4402a";
 
 const projectAccessKey = "AQAAAAAAAEGvyZiWA9FMslYeG_yayXaHnSI";
 const walletConnectProjectId = "c65a6cb1aa83c4e24500130f23a437d8";
@@ -22,7 +22,7 @@ export const kitConfig: KitConfig = {
     // Demo nft
     {
       contractAddress: DEMO_NFT_CONTRACT_ADDRESS,
-      chainId: ChainId.ARBITRUM_SEPOLIA,
+      chainId: ChainId.SONEIUM_MINATO,
     },
   ],
 };
@@ -30,8 +30,8 @@ export const kitConfig: KitConfig = {
 export const config = createConfig("waas", {
   ...kitConfig,
   appName: "Kit Demo",
-  chainIds: [ChainId.ARBITRUM_SEPOLIA],
-  defaultChainId: ChainId.ARBITRUM_SEPOLIA,
+  chainIds: [ChainId.SONEIUM_MINATO],
+  defaultChainId: ChainId.SONEIUM_MINATO,
   waasConfigKey:
     "eyJwcm9qZWN0SWQiOjE2ODE1LCJlbWFpbFJlZ2lvbiI6ImNhLWNlbnRyYWwtMSIsImVtYWlsQ2xpZW50SWQiOiI2N2V2NXVvc3ZxMzVmcGI2OXI3NnJoYnVoIiwicnBjU2VydmVyIjoiaHR0cHM6Ly93YWFzLnNlcXVlbmNlLmFwcCJ9",
   email: false,
@@ -45,7 +45,7 @@ export const config = createConfig("waas", {
     logoLight: SoneiumLogo,
     logoDark: SoneiumLogo,
     // iconWidth: "100px",
-    defaultNetwork: ChainId.ARBITRUM_SEPOLIA,
+    defaultNetwork: ChainId.SONEIUM_MINATO,
   },
   walletConnect: {
     projectId: walletConnectProjectId,
