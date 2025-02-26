@@ -1,7 +1,8 @@
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
-import { BufferGeometry, Mesh, MeshStandardMaterial, Object3D } from "three";
+import { BufferGeometry, Mesh, MeshStandardMaterial } from "three";
+import Gem from "./Gem";
 
 const size = 1.2;
 const spacingRock = 1.6;
@@ -11,13 +12,12 @@ export default function Rock(props: {
   health: number;
   depth: number;
   highlight: boolean;
+  hasGem: boolean;
 }) {
-  const { health, depth, index, highlight } = props;
+  const { health, depth, index, highlight, hasGem } = props;
   const { nodes: nodesMine } = useGLTF("/rock-mine.glb");
-  const [laggedHealth, setLaggedHealth] = useState(3);
-
-  const myMesh = useRef<Object3D>();
-
+  const maxHealth = (hasGem ? 10 : 3)
+  const [laggedHealth, setLaggedHealth] = useState(maxHealth);
   const rockMesh1 = nodesMine["rock-1"] as Mesh<
     BufferGeometry,
     MeshStandardMaterial
@@ -30,11 +30,13 @@ export default function Rock(props: {
     BufferGeometry,
     MeshStandardMaterial
   >;
+
+  const myMesh = useRef(rockMesh1);
   useFrame((_state, delta) => {
     if (laggedHealth > health) {
       setLaggedHealth(laggedHealth - delta * 3);
-    } else if (health === 3) {
-      setLaggedHealth(3);
+    } else if (health > laggedHealth) {
+      setLaggedHealth(health);
     }
     const str = laggedHealth - health;
     const now = _state.clock.getElapsedTime();
@@ -61,21 +63,19 @@ export default function Rock(props: {
         ref={myMesh}
         // scale={[1, 1, 1]}
         geometry={
-          health === 3
+          health === maxHealth
             ? rockMesh1.geometry
-            : health === 2
+            : health >= maxHealth/2
             ? rockMesh2.geometry
             : rockMesh3.geometry
         }
       >
         <meshStandardMaterial
-          transparent
-          opacity={0.15}
-          visible={false}
           {...rockMesh1.material}
           color={highlight ? [0.25, 0.25, 0.25] : rockMesh1.material.color}
           // emissive={highlights[i] ? [0.125, 0.25, 0] : [0, 0, 0]}
         />
+        {hasGem && health < maxHealth && <Gem />}
       </mesh>
     </group>
   );

@@ -94,7 +94,7 @@ export const Homepage: FC = () => {
       // If we were pending but now we're not, and there's no transaction data, it failed
       setMintStatus("failed");
     }
-  }, [isPendingMintTxn, mintTxnData, mintStatus]);
+  }, [isPendingMintTxn, mintTxnData, mintStatus, refetchNftBalance]);
 
   // Set demo mode based on pickaxe ownership
   useEffect(() => {
