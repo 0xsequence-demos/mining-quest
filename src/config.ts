@@ -11,6 +11,7 @@ export const demoNftContractChainId = parseInt(
 );
 
 const walletAppName = import.meta.env.VITE_WALLET_APP_NAME;
+const walletLogo = import.meta.env.VITE_WALLET_APP_LOGO;
 const waasConfigKey = import.meta.env.VITE_WAAS_CONFIG_KEY;
 const projectAccessKey = import.meta.env.VITE_PROJECT_ACCESS_KEY;
 const walletConnectProjectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID;
@@ -46,12 +47,8 @@ export const config = createConfig("waas", {
     walletUrl: walletAppUrl,
     name: walletAppName,
     projectAccessKey,
-    logoLight: LogoImg(
-      "https://soneium.org/_next/static/media/symbol-white.c446ffef.webp"
-    ),
-    logoDark: LogoImg(
-      "https://soneium.org/_next/static/media/symbol-white.c446ffef.webp"
-    ),
+    logoLight: LogoImg(walletLogo),
+    logoDark: LogoImg(walletLogo),
     defaultNetwork: demoNftContractChainId,
   },
   walletConnect: {
