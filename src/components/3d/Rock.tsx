@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
