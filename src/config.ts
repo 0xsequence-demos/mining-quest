@@ -1,51 +1,58 @@
 import { KitConfig, createConfig } from "@0xsequence/kit";
-import { ChainId } from "@0xsequence/network";
-import SoneiumLogo from "./components/icons/SoneiumLogo";
 
-export const DEMO_NFT_CONTRACT_ADDRESS =
-  "0x5bcbc265a86fda3502e12cf17947445f7fd4402a";
+import LogoImg from "./components/Logo.tsx";
 
-const projectAccessKey = "AQAAAAAAAEGvyZiWA9FMslYeG_yayXaHnSI";
-const walletConnectProjectId = "c65a6cb1aa83c4e24500130f23a437d8";
+const GAME_NAME = "Mining Quest";
 
-const urlParams = new URLSearchParams(window.location.search);
-const walletAppUrl =
-  urlParams.get("walletAppUrl") ?? "https://wallet.soneium-demo.xyz";
+export const demoNftContractAddress = import.meta.env
+  .VITE_DEMO_NFT_CONTRACT_ADDRESS;
+export const demoNftContractChainId = parseInt(
+  import.meta.env.VITE_DEMO_NFT_CONTRACT_CHAIN_ID
+);
+
+const walletAppName = import.meta.env.VITE_WALLET_APP_NAME;
+const waasConfigKey = import.meta.env.VITE_WAAS_CONFIG_KEY;
+const projectAccessKey = import.meta.env.VITE_PROJECT_ACCESS_KEY;
+const walletConnectProjectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID;
+
+const walletAppUrl = import.meta.env.VITE_WALLET_APP_URL;
 
 export const kitConfig: KitConfig = {
   projectAccessKey,
   defaultTheme: "dark",
   signIn: {
-    projectName: "Kit Demo",
+    projectName: GAME_NAME,
   },
   displayedAssets: [
     // Demo nft
     {
-      contractAddress: DEMO_NFT_CONTRACT_ADDRESS,
-      chainId: ChainId.SONEIUM_MINATO,
+      contractAddress: demoNftContractAddress,
+      chainId: demoNftContractChainId,
     },
   ],
 };
 
 export const config = createConfig("waas", {
   ...kitConfig,
-  appName: "Kit Demo",
-  chainIds: [ChainId.SONEIUM_MINATO],
-  defaultChainId: ChainId.SONEIUM_MINATO,
-  waasConfigKey:
-    "eyJwcm9qZWN0SWQiOjE2ODE1LCJlbWFpbFJlZ2lvbiI6ImNhLWNlbnRyYWwtMSIsImVtYWlsQ2xpZW50SWQiOiI2N2V2NXVvc3ZxMzVmcGI2OXI3NnJoYnVoIiwicnBjU2VydmVyIjoiaHR0cHM6Ly93YWFzLnNlcXVlbmNlLmFwcCJ9",
+  appName: GAME_NAME,
+  chainIds: [demoNftContractChainId],
+  defaultChainId: demoNftContractChainId,
+  waasConfigKey,
   email: false,
   signIn: {
     descriptiveSocials: true,
   },
   ecosystem: {
     walletUrl: walletAppUrl,
-    name: "Soneium",
+    name: walletAppName,
     projectAccessKey,
-    logoLight: SoneiumLogo,
-    logoDark: SoneiumLogo,
-    // iconWidth: "100px",
-    defaultNetwork: ChainId.SONEIUM_MINATO,
+    logoLight: LogoImg(
+      "https://soneium.org/_next/static/media/symbol-white.c446ffef.webp"
+    ),
+    logoDark: LogoImg(
+      "https://soneium.org/_next/static/media/symbol-white.c446ffef.webp"
+    ),
+    defaultNetwork: demoNftContractChainId,
   },
   walletConnect: {
     projectId: walletConnectProjectId,

@@ -8,10 +8,12 @@ import {
   useWalletClient,
   useWriteContract,
   useReadContract,
+  useChainId,
+  useSwitchChain,
 } from "wagmi";
 
 import { NFT_ABI } from "../abi";
-import { DEMO_NFT_CONTRACT_ADDRESS } from "../config";
+import { demoNftContractAddress, demoNftContractChainId } from "../config";
 import View3D from "./3d/View3D";
 import MiningGame from "./3d/MiningGame";
 import ItemViewer3D from "./3d/ItemViewer3D";
@@ -25,12 +27,15 @@ export const Homepage: FC = () => {
   const { address } = useAccount();
   const { data: walletClient } = useWalletClient();
 
+  const chainId = useChainId();
+  const { switchChainAsync } = useSwitchChain();
+
   const {
     data: nftBalance,
     isLoading: isLoadingNFT,
     refetch: refetchNftBalance,
   } = useReadContract({
-    address: DEMO_NFT_CONTRACT_ADDRESS,
+    address: demoNftContractAddress,
     abi: NFT_ABI,
     functionName: "balanceOf",
     args: address ? [address, 0n] : undefined,
@@ -49,11 +54,20 @@ export const Homepage: FC = () => {
       return;
     }
 
+    // check if we're on the right chain
+    if (chainId !== demoNftContractChainId) {
+      try {
+        await switchChainAsync({ chainId: demoNftContractChainId });
+      } catch (e) {
+        console.error("Failed to switch chain:", e);
+      }
+    }
+
     try {
       setMintStatus("pending");
 
       writeContract({
-        address: DEMO_NFT_CONTRACT_ADDRESS,
+        address: demoNftContractAddress,
         abi: NFT_ABI,
         functionName: "mint",
         args: [0],
