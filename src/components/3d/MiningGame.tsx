@@ -4,10 +4,12 @@ import useSound from "use-sound";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   BufferGeometry,
+  Color,
   Euler,
   Group,
   Material,
   Mesh,
+  PointLight,
   Quaternion,
   Ray,
   Sphere,
@@ -22,6 +24,9 @@ function allSame(arr: number[]) {
 }
 
 const chunkNames = ["xs", "s", "m", "l"];
+
+const upright = new Quaternion()
+upright.setFromEuler(new Euler(0.35, 0, 0))
 
 function lerp(a: number, b: number, mix: number) {
   return (1 - mix) * a + mix * b;
@@ -39,6 +44,8 @@ function indexToCoord(i: number) {
   return { x, y };
 }
 
+const gemDestination = new Vector3(-0.75, 2.5, -2);
+
 const pickaxeHomePosition = new Vector3(0.75, -1.25, 2);
 const pickaxeHomeRotation = new Euler(0, -1.25, -0.75);
 const pickaxeHomeQuaternion = new Quaternion().setFromEuler(
@@ -49,13 +56,16 @@ function MiningGame({
   setSwing,
   setBroken,
   setDepth,
+  mintGem,
 }: {
   setSwing: React.Dispatch<React.SetStateAction<number>>;
   setBroken: React.Dispatch<React.SetStateAction<number>>;
   setDepth: React.Dispatch<React.SetStateAction<number>>;
+  mintGem: ()=>void;
 }) {
   const { nodes: nodesPickaxe } = useGLTF("/pickaxe-iron.glb");
   const { nodes: nodesMine } = useGLTF("/rock-mine.glb");
+  const { nodes: nodesGem } = useGLTF("/gem.glb");
   const [pickaxePosition, setPickaxePosition] = useState(new Vector3());
   const [pickaxeQuaternion, setPickaxeQuaternion] = useState(new Quaternion());
   const [pickaxeAction, setPickaxeAction] = useState(0);
@@ -67,6 +77,8 @@ function MiningGame({
   const myRailTie2 = useRef<Group>(null);
   const myGroup = useRef<Group>(null);
 
+  const [gemIndex, setGemIndex] = useState(16+~~(Math.random()*16*2))
+
   useFrame((_state, delta) => {
     sharedNow = Date.now() * 0.001;
     if (!myGroup.current) {
@@ -77,8 +89,10 @@ function MiningGame({
     }
     if (myPickaxe.current) {
       const a = Math.pow(pickaxeAction, 2);
-      myPickaxe.current.position.lerpVectors(
-        pickaxeHomePosition,
+      myPickaxe.current.position.copy(pickaxeHomePosition);
+      myPickaxe.current.position.x += Math.cos(sharedNow) * 0.5 + 0.5;
+      myPickaxe.current.position.y += Math.sin(sharedNow * 6) * 0.05;
+        myPickaxe.current.position.lerp(
         pickaxePosition,
         a,
       );
@@ -87,6 +101,8 @@ function MiningGame({
         pickaxeQuaternion,
         a,
       );
+      myPickaxe.current.rotation.x -= Math.cos(sharedNow * 6) * 0.05;
+      myPickaxe.current.rotation.y += Math.sin(sharedNow) * 0.125 - Math.cos(sharedNow) * 0.2 - 0.2;
     }
     // const now = clock.getElapsedTime();
     if (myFlash.current) {
@@ -127,7 +143,7 @@ function MiningGame({
   );
 
   const [rockHealths, setRockHealths] = useState(
-    Array.from({ length: 16 }, () => 3),
+    Array.from({ length: 16 }, (i) => i === gemIndex ? 10 : 3),
   );
 
   const [ray, setRay] = useState<Ray>();
@@ -165,73 +181,115 @@ function MiningGame({
     [rockDepths],
   );
 
-  const makeChunks = useCallback(
-    (i: number, depth: number, num: number) => {
-      if (!myGroup.current) {
-        return;
+  const makePrizeMesh = useCallback((
+    i:number, 
+    depth:number,
+    protoMesh: Mesh<BufferGeometry, Material>,
+    special?:boolean
+  ) => {
+    if (!myGroup.current) {
+      return;
+    }    
+    const { x, y } = indexToCoord(i);
+    const meshPrize = new Mesh(protoMesh.geometry, protoMesh.material);
+    myGroup.current.add(meshPrize);
+    meshPrize.scale.setScalar(special ? 1 : 4);
+    meshPrize.rotation.set(
+      Math.random() * 7,
+      Math.random() * 7,
+      Math.random() * 7,
+    );
+    meshPrize.userData.origRot = meshPrize.rotation.clone();
+    meshPrize.userData.spin = new Vector3(
+      Math.random() - 0.5,
+      Math.random() - 0.5,
+      Math.random() - 0.5,
+    );
+    meshPrize.position.set(x, y, depth);
+    meshPrize.userData.origPos = meshPrize.position.clone();
+    meshPrize.userData.startTime = sharedNow;
+    const a = Math.random() * Math.PI * 2;
+    meshPrize.userData.spreadVecX = Math.cos(a) * 4;
+    meshPrize.userData.spreadVecY = Math.sin(a) * 4;
+    const duration = special ? 2.5 : 0.5
+    if(special) {
+      const intensity = 30
+      const light = new PointLight(new Color(1, 0.7, 0.3), intensity)
+      meshPrize.add(light)
+      meshPrize.onBeforeRender = () => {
+        const elapsed = (sharedNow - meshPrize.userData.startTime) / duration;
+        if(elapsed < 0.5) {
+          tempVec3.copy(meshPrize.userData.origPos)
+        }else {
+          tempVec3.copy(gemDestination)
+          tempVec3.z += meshPrize.userData.origPos.z + 5
+        }
+        meshPrize.position.copy(tempVec3)
+        const presentRatio = Math.pow(Math.cos(elapsed*Math.PI * 2) * -0.5 + 0.5, 0.5)
+        tempVec3.set(-1, 1, meshPrize.userData.origPos.z + 2)
+        meshPrize.position.lerp(tempVec3, presentRatio)
+        if(elapsed > 0.5) {
+          light.intensity = presentRatio * intensity
+          meshPrize.scale.setScalar(Math.pow((1 - elapsed) * 2, 0.5))
+        }
+      meshPrize.rotation.copy(meshPrize.userData.origRot);
+      meshPrize.quaternion.slerp(upright, presentRatio)
+      meshPrize.rotation.y += (elapsed*6-presentRatio)*2
+    };
+    } else {
+      meshPrize.onBeforeRender = () => {
+        meshPrize.position.z = meshPrize.userData.origPos.z;
+        const elapsed = (sharedNow - meshPrize.userData.startTime);
+        meshPrize.position.z += elapsed * elapsed * 25;
+        meshPrize.position.x = lerp(
+        meshPrize.userData.origPos.x,
+        meshPrize.userData.spreadVecX,
+        elapsed,
+      );
+      meshPrize.position.y = lerp(
+        meshPrize.userData.origPos.y,
+        meshPrize.userData.spreadVecY,
+        elapsed,
+      );
+      meshPrize.position.y = lerp(
+        meshPrize.position.y,
+        -meshPrize.userData.origPos.y * 4 - 16,
+        elapsed * elapsed,
+      );
+      meshPrize.position.x = lerp(
+        meshPrize.position.x,
+        0,
+        elapsed * elapsed,
+      );
+      meshPrize.rotation.copy(meshPrize.userData.origRot);
+      meshPrize.rotation.x += meshPrize.userData.spin.x * elapsed * 30;
+      meshPrize.rotation.y += meshPrize.userData.spin.y * elapsed * 30;
+      meshPrize.rotation.z += meshPrize.userData.spin.z * elapsed * 30;
+    };
+  }
+    setTimeout(() => {
+      if (meshPrize.parent) {
+        meshPrize.parent.remove(meshPrize);
       }
-      const { x, y } = indexToCoord(i);
+    }, duration * 1000);
+  },[])
+
+  const makeChunks = useCallback(
+    (id: number, depth: number, num: number, gem?:boolean) => {
       for (let i = 0; i < num; i++) {
-        const m = nodesMine[
+        const protoMesh = nodesMine[
           `chunk-${chunkNames[~~(Math.random() * Math.random() * 4)]}`
         ] as Mesh<BufferGeometry, Material>;
-        const meshPrize = new Mesh(m.geometry, m.material);
-        myGroup.current.add(meshPrize);
-        meshPrize.scale.setScalar(4);
-        meshPrize.rotation.set(
-          Math.random() * 7,
-          Math.random() * 7,
-          Math.random() * 7,
-        );
-        meshPrize.userData.origRot = meshPrize.rotation.clone();
-        meshPrize.userData.spin = new Vector3(
-          Math.random() - 0.5,
-          Math.random() - 0.5,
-          Math.random() - 0.5,
-        );
-        meshPrize.position.set(x, y, depth);
-        meshPrize.userData.origPos = meshPrize.position.clone();
-        meshPrize.userData.startTime = sharedNow;
-        const a = Math.random() * Math.PI * 2;
-        meshPrize.userData.spreadVecX = Math.cos(a) * 4;
-        meshPrize.userData.spreadVecY = Math.sin(a) * 4;
-        meshPrize.onBeforeRender = () => {
-          meshPrize.position.z = meshPrize.userData.origPos.z;
-          const elapsed = sharedNow - meshPrize.userData.startTime;
-          meshPrize.position.z += elapsed * elapsed * 25;
-          meshPrize.position.x = lerp(
-            meshPrize.userData.origPos.x,
-            meshPrize.userData.spreadVecX,
-            elapsed,
-          );
-          meshPrize.position.y = lerp(
-            meshPrize.userData.origPos.y,
-            meshPrize.userData.spreadVecY,
-            elapsed,
-          );
-          meshPrize.position.y = lerp(
-            meshPrize.position.y,
-            -meshPrize.userData.origPos.y * 4 - 16,
-            elapsed * elapsed,
-          );
-          meshPrize.position.x = lerp(
-            meshPrize.position.x,
-            0,
-            elapsed * elapsed,
-          );
-          meshPrize.rotation.copy(meshPrize.userData.origRot);
-          meshPrize.rotation.x += meshPrize.userData.spin.x * elapsed * 30;
-          meshPrize.rotation.y += meshPrize.userData.spin.y * elapsed * 30;
-          meshPrize.rotation.z += meshPrize.userData.spin.z * elapsed * 30;
-        };
-        setTimeout(() => {
-          if (meshPrize.parent) {
-            meshPrize.parent.remove(meshPrize);
-          }
-        }, 500);
+          makePrizeMesh(id, depth, protoMesh)
+      }
+      if(gem) {
+        const protoMesh = nodesGem[
+          "gem"
+        ] as Mesh<BufferGeometry, Material>;
+          makePrizeMesh(id, depth, protoMesh, true)
       }
     },
-    [nodesMine, rockDepths],
+    [makePrizeMesh, nodesGem, nodesMine],
   );
 
   useEffect(() => {
@@ -270,6 +328,10 @@ function MiningGame({
   const [sfxMedium6] = useSound("/audio/pickaxe-medium6.mp3");
   const [sfxHeavy1] = useSound("/audio/pickaxe-heavy1.mp3");
   const [sfxHeavy2] = useSound("/audio/pickaxe-heavy2.mp3");
+  const [sfxGemHit1] = useSound("/audio/gem-hit1.mp3");
+  const [sfxGemHit2] = useSound("/audio/gem-hit2.mp3");
+  const [sfxGemHit3] = useSound("/audio/gem-hit3.mp3");
+  const [sfxGemShine] = useSound("/audio/gem-shine.mp3");
   return (
     <>
       <mesh
@@ -288,22 +350,35 @@ function MiningGame({
           if (!info) {
             return;
           }
-          let cracked = false;
+          let cracked = 0;
           for (const i of info.candidates) {
+            const oldRockIndex = i+rockDepths[i]*16
             if (rockHealths[i] > 1) {
               rockHealths[i]--;
+              if(oldRockIndex===gemIndex){
+                [sfxGemHit1,sfxGemHit2,sfxGemHit3][~~(Math.random()*3)]()
+              }
               makeChunks(i, -rockDepths[i], 1);
             } else {
-              makeChunks(i, -rockDepths[i], 5);
+              makeChunks(i, -rockDepths[i], 5, oldRockIndex === gemIndex);
               rockDepths[i]++;
-              rockHealths[i] = 3;
-              cracked = true;
+              const newRockIndex = i+rockDepths[i]*16
+              if(oldRockIndex === gemIndex){
+                sfxGemShine()
+                const newGemIndex = gemIndex+32+~~(Math.random()*16*2)
+                setGemIndex(newGemIndex)
+                setTimeout(() => mintGem(), 1000);
+                rockHealths[i] = newRockIndex === newGemIndex ? 10 : 3;
+              } else {
+                rockHealths[i] = newRockIndex === gemIndex ? 10 : 3;
+              }
+              cracked++;
             }
           }
           if (info.candidates.length > 0) {
-            if (cracked) {
+            if (cracked > 0) {
               [sfxHeavy1, sfxHeavy2][~~(Math.random() * 2)]();
-              setBroken((current) => (current += 1));
+              setBroken((current) => (current += cracked));
             } else if (info.candidates.length === 1) {
               [sfxLight1, sfxLight2, sfxLight3, sfxLight4][
                 ~~(Math.random() * 4)
@@ -405,6 +480,7 @@ function MiningGame({
             health={rockHealths[i]}
             depth={rockDepths[i]}
             highlight={rockHighlights[i]}
+            hasGem={i + rockDepths[i]*16 === gemIndex}
           />
         ))}
       </group>
