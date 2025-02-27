@@ -31,9 +31,9 @@ export const Homepage: FC = () => {
   const { switchChainAsync } = useSwitchChain();
 
   const {
-    data: nftBalance,
-    isLoading: isLoadingNFT,
-    refetch: refetchNftBalance,
+    data: nftBalancePickaxe,
+    isLoading: isLoadingNftBalancePickaxe,
+    refetch: refetchNftBalancePickaxe,
   } = useReadContract({
     address: demoNftContractAddress,
     abi: NFT_ABI,
@@ -42,14 +42,26 @@ export const Homepage: FC = () => {
   });
 
   const {
+    data: nftBalanceGems,
+    isLoading: isLoadingNftBalanceGems,
+    refetch: refetchNftBalanceGems,
+  } = useReadContract({
+    address: demoNftContractAddress,
+    abi: NFT_ABI,
+    functionName: "balanceOf",
+    args: address ? [address, 1n] : undefined,
+  });
+
+  const {
     data: mintTxnData,
     isPending: isPendingMintTxn,
     writeContract,
   } = useWriteContract();
 
-  const hasPickaxe = typeof nftBalance === "bigint" && nftBalance > 0n;
+  const hasPickaxe = typeof nftBalancePickaxe === "bigint" && nftBalancePickaxe > 0n;
+  const gemsOwned = Number(typeof nftBalanceGems === "bigint" ? nftBalanceGems : 0n);
 
-  const runMintNFT = async () => {
+  const runMintNFT = async (itemId:number) => {
     if (!walletClient) {
       return;
     }
@@ -64,37 +76,54 @@ export const Homepage: FC = () => {
     }
 
     try {
-      setMintStatus("pending");
+      setMintStatusPickaxe("pending");
 
       writeContract({
         address: demoNftContractAddress,
         abi: NFT_ABI,
         functionName: "mint",
-        args: [0],
+        args: [itemId],
       });
     } catch (error) {
       console.error("Minting failed:", error);
-      setMintStatus("failed");
+      setMintStatusPickaxe("failed");
     }
   };
 
-  const [mintStatus, setMintStatus] = useState<MintStatus>("notStarted");
+  const [mintStatusGem, setMintStatusGem] = useState<MintStatus>("notStarted");
+  const [mintStatusPickaxe, setMintStatusPickaxe] = useState<MintStatus>("notStarted");
 
   // Handle mint transaction status changes
   useEffect(() => {
     if (isPendingMintTxn) {
-      setMintStatus("pending");
+      setMintStatusPickaxe("pending");
     } else if (mintTxnData) {
       // add a bit of delay before setting the demo mode to play
       setTimeout(async () => {
-        await refetchNftBalance();
-        setMintStatus("successs");
+        await refetchNftBalancePickaxe();
+        setMintStatusPickaxe("successs");
       }, 1500);
-    } else if (!isPendingMintTxn && !mintTxnData && mintStatus === "pending") {
+    } else if (!isPendingMintTxn && !mintTxnData && mintStatusPickaxe === "pending") {
       // If we were pending but now we're not, and there's no transaction data, it failed
-      setMintStatus("failed");
+      setMintStatusPickaxe("failed");
     }
-  }, [isPendingMintTxn, mintTxnData, mintStatus, refetchNftBalance]);
+  }, [isPendingMintTxn, mintTxnData, mintStatusPickaxe, refetchNftBalancePickaxe]);
+
+  // Handle mint transaction status changes
+  useEffect(() => {
+    if (isPendingMintTxn) {
+      setMintStatusGem("pending");
+    } else if (mintTxnData) {
+      // add a bit of delay before setting the demo mode to play
+      setTimeout(async () => {
+        await refetchNftBalanceGems();
+        setMintStatusGem("successs");
+      }, 1500);
+    } else if (!isPendingMintTxn && !mintTxnData && mintStatusGem === "pending") {
+      // If we were pending but now we're not, and there's no transaction data, it failed
+      setMintStatusGem("failed");
+    }
+  }, [isPendingMintTxn, mintTxnData, refetchNftBalanceGems, mintStatusGem]);
 
   // Set demo mode based on pickaxe ownership
   useEffect(() => {
@@ -119,7 +148,7 @@ export const Homepage: FC = () => {
   }, []);
 
   // Show loading state while checking wallet or NFT balance
-  if (isCheckingWallet || (wallets.length > 0 && isLoadingNFT)) {
+  if (isCheckingWallet || (wallets.length > 0 && isLoadingNftBalancePickaxe)) {
     return (
       <div
         style={{
@@ -178,20 +207,24 @@ export const Homepage: FC = () => {
                     setSwing={setSwing}
                     setBroken={setBroken}
                     setDepth={setDepth}
+                    mintGem={async () => {
+                      await runMintNFT(1)
+                      refetchNftBalanceGems()
+                    }}
                   />
                 ) : (
                   <ItemViewer3D>
-                    <PickAxe mintStatus={mintStatus} />
+                    <PickAxe mintStatus={mintStatusPickaxe} />
                   </ItemViewer3D>
                 )}
               </View3D>
               {hasPickaxe ? (
-                <Hud swing={swing} broken={broken} depth={depth} />
+                <Hud swing={swing} broken={broken} depth={depth} gems={gemsOwned + (isLoadingNftBalanceGems || mintStatusGem === 'pending' ? "+" : "")} />
               ) : null}
               <Minting
                 hasPickaxe={hasPickaxe}
-                mintStatus={mintStatus}
-                runMintNFT={runMintNFT}
+                mintStatus={mintStatusPickaxe}
+                runMintNFT={() => runMintNFT(0)}
               />
             </>
           ) : (
@@ -293,10 +326,12 @@ function Hud({
   swing,
   broken,
   depth,
+  gems,
 }: {
   swing: number;
   broken: number;
   depth: number;
+  gems: string | number;
 }) {
   return (
     <div className="absolute bottom-[2rem] bg-black p-2 md:p-4  max-w-[90%] md:max-w-[80%] data-[visible='false']:opacity-0 transition-all data-[visible='false']:translate-y-12 pointer-events-none flex gap-9 text-[8px] md:text-[10px]">
@@ -308,6 +343,9 @@ function Hud({
       </span>
       <span>
         Depth <span className="text-green-500">[{depth}]</span>
+      </span>
+      <span>
+        Gems <span className="text-green-500">[{gems}]</span>
       </span>
     </div>
   );

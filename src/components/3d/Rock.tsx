@@ -1,7 +1,7 @@
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
-import { BufferGeometry, Mesh, MeshStandardMaterial } from "three";
+import { BufferGeometry, Color, Mesh, MeshStandardMaterial } from "three";
 import Gem from "./Gem";
 
 const size = 1.2;
@@ -45,6 +45,16 @@ export default function Rock(props: {
       myMesh.current.rotation.z = Math.cos(now * 44) * 0.1 * str;
     }
   });
+  
+  const colorDepth = Math.round(depth/2 + Math.sin(index * 0.043 * (3 + Math.sin(depth))) * 2) / 2
+  const colorVar = Math.min(colorDepth / 100, 0.025);
+
+  const color = [0.15 + Math.sin(colorDepth+4) * colorVar, 0.15 + Math.cos(colorDepth*-2+3) * colorVar, 0.15 + Math.sin(colorDepth*3+4) * colorVar];
+  if(highlight) {
+    for (let i = 0; i < color.length; i++) {
+      color[i] += 0.125
+    }
+  }
   return (
     <group
       position={[
@@ -72,7 +82,7 @@ export default function Rock(props: {
       >
         <meshStandardMaterial
           {...rockMesh1.material}
-          color={highlight ? [0.25, 0.25, 0.25] : rockMesh1.material.color}
+          color={new Color(color[0], color[1], color[2])}
           // emissive={highlights[i] ? [0.125, 0.25, 0] : [0, 0, 0]}
         />
         {hasGem && health < maxHealth && <Gem />}

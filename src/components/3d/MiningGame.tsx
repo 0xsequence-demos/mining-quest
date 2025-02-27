@@ -56,10 +56,12 @@ function MiningGame({
   setSwing,
   setBroken,
   setDepth,
+  mintGem,
 }: {
   setSwing: React.Dispatch<React.SetStateAction<number>>;
   setBroken: React.Dispatch<React.SetStateAction<number>>;
   setDepth: React.Dispatch<React.SetStateAction<number>>;
+  mintGem: ()=>void;
 }) {
   const { nodes: nodesPickaxe } = useGLTF("/pickaxe-iron.glb");
   const { nodes: nodesMine } = useGLTF("/rock-mine.glb");
@@ -216,12 +218,19 @@ function MiningGame({
       meshPrize.add(light)
       meshPrize.onBeforeRender = () => {
         const elapsed = (sharedNow - meshPrize.userData.startTime) / duration;
-        meshPrize.position.copy(elapsed < 0.5 ? meshPrize.userData.origPos : gemDestination)
+        if(elapsed < 0.5) {
+          tempVec3.copy(meshPrize.userData.origPos)
+        }else {
+          tempVec3.copy(gemDestination)
+          tempVec3.z += meshPrize.userData.origPos.z + 5
+        }
+        meshPrize.position.copy(tempVec3)
         const presentRatio = Math.pow(Math.cos(elapsed*Math.PI * 2) * -0.5 + 0.5, 0.5)
         tempVec3.set(-1, 1, meshPrize.userData.origPos.z + 2)
         meshPrize.position.lerp(tempVec3, presentRatio)
         if(elapsed > 0.5) {
           light.intensity = presentRatio * intensity
+          meshPrize.scale.setScalar(Math.pow((1 - elapsed) * 2, 0.5))
         }
       meshPrize.rotation.copy(meshPrize.userData.origRot);
       meshPrize.quaternion.slerp(upright, presentRatio)
@@ -358,6 +367,7 @@ function MiningGame({
                 sfxGemShine()
                 const newGemIndex = gemIndex+32+~~(Math.random()*16*2)
                 setGemIndex(newGemIndex)
+                setTimeout(() => mintGem(), 1000);
                 rockHealths[i] = newRockIndex === newGemIndex ? 10 : 3;
               } else {
                 rockHealths[i] = newRockIndex === gemIndex ? 10 : 3;
