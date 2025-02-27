@@ -4,7 +4,6 @@ import useSound from "use-sound";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   BufferGeometry,
-  Color,
   Euler,
   Group,
   Material,
@@ -16,6 +15,7 @@ import {
   Vector3,
 } from "three";
 import Rock from "./Rock";
+import { lightColors } from "./lightColors";
 
 function allSame(arr: number[]) {
   return arr.length > 0 && arr.every((val) => val === arr[0])
@@ -61,11 +61,11 @@ function MiningGame({
   setSwing: React.Dispatch<React.SetStateAction<number>>;
   setBroken: React.Dispatch<React.SetStateAction<number>>;
   setDepth: React.Dispatch<React.SetStateAction<number>>;
-  mintGem: ()=>void;
+  mintGem: (id:number)=>void;
 }) {
   const { nodes: nodesPickaxe } = useGLTF("/pickaxe-iron.glb");
   const { nodes: nodesMine } = useGLTF("/rock-mine.glb");
-  const { nodes: nodesGem } = useGLTF("/gem.glb");
+  const { nodes: nodesGem } = useGLTF("/gems.glb");
   const [pickaxePosition, setPickaxePosition] = useState(new Vector3());
   const [pickaxeQuaternion, setPickaxeQuaternion] = useState(new Quaternion());
   const [pickaxeAction, setPickaxeAction] = useState(0);
@@ -78,6 +78,7 @@ function MiningGame({
   const myGroup = useRef<Group>(null);
 
   const [gemIndex, setGemIndex] = useState(16+~~(Math.random()*16*2))
+  const [currentGemType, setCurrentGemType] = useState<"moon" | "sun">("moon")
 
   useFrame((_state, delta) => {
     sharedNow = Date.now() * 0.001;
@@ -214,7 +215,7 @@ function MiningGame({
     const duration = special ? 2.5 : 0.5
     if(special) {
       const intensity = 30
-      const light = new PointLight(new Color(1, 0.7, 0.3), intensity)
+      const light = new PointLight(lightColors[currentGemType], intensity)
       meshPrize.add(light)
       meshPrize.onBeforeRender = () => {
         const elapsed = (sharedNow - meshPrize.userData.startTime) / duration;
@@ -272,7 +273,7 @@ function MiningGame({
         meshPrize.parent.remove(meshPrize);
       }
     }, duration * 1000);
-  },[])
+  },[currentGemType])
 
   const makeChunks = useCallback(
     (id: number, depth: number, num: number, gem?:boolean) => {
@@ -284,12 +285,12 @@ function MiningGame({
       }
       if(gem) {
         const protoMesh = nodesGem[
-          "gem"
+          `gem-${currentGemType}`
         ] as Mesh<BufferGeometry, Material>;
           makePrizeMesh(id, depth, protoMesh, true)
       }
     },
-    [makePrizeMesh, nodesGem, nodesMine],
+    [currentGemType, makePrizeMesh, nodesGem, nodesMine],
   );
 
   useEffect(() => {
@@ -367,7 +368,9 @@ function MiningGame({
                 sfxGemShine()
                 const newGemIndex = gemIndex+32+~~(Math.random()*16*2)
                 setGemIndex(newGemIndex)
-                setTimeout(() => mintGem(), 1000);
+                const gemType = currentGemType
+                setTimeout(() => mintGem(gemType === "sun" ? 1 : 2), 1000);
+                setCurrentGemType(Math.random() > 0.66 ? "sun" : "moon")
                 rockHealths[i] = newRockIndex === newGemIndex ? 10 : 3;
               } else {
                 rockHealths[i] = newRockIndex === gemIndex ? 10 : 3;
@@ -480,7 +483,7 @@ function MiningGame({
             health={rockHealths[i]}
             depth={rockDepths[i]}
             highlight={rockHighlights[i]}
-            hasGem={i + rockDepths[i]*16 === gemIndex}
+            gem={i + rockDepths[i]*16 === gemIndex ? currentGemType : undefined}
           />
         ))}
       </group>

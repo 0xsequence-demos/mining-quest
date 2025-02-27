@@ -12,11 +12,11 @@ export default function Rock(props: {
   health: number;
   depth: number;
   highlight: boolean;
-  hasGem: boolean;
+  gem?: "sun" | "moon";
 }) {
-  const { health, depth, index, highlight, hasGem } = props;
+  const { health, depth, index, highlight, gem } = props;
   const { nodes: nodesMine } = useGLTF("/rock-mine.glb");
-  const maxHealth = (hasGem ? 10 : 3)
+  const maxHealth = (gem ? 10 : 3)
   const [laggedHealth, setLaggedHealth] = useState(maxHealth);
   const rockMesh1 = nodesMine["rock-1"] as Mesh<
     BufferGeometry,
@@ -85,7 +85,7 @@ export default function Rock(props: {
           color={new Color(color[0], color[1], color[2])}
           // emissive={highlights[i] ? [0.125, 0.25, 0] : [0, 0, 0]}
         />
-        {hasGem && health < maxHealth && <Gem />}
+        {gem && health < maxHealth && <Gem gemType={gem} />}
       </mesh>
     </group>
   );
