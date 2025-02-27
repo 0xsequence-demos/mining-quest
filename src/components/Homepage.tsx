@@ -49,7 +49,7 @@ export const Homepage: FC = () => {
     address: demoNftContractAddress,
     abi: NFT_ABI,
     functionName: "balanceOf",
-    args: address ? [address, 1n] : undefined,
+    args: address ? [address, 2n] : undefined,
   });
 
   const {
@@ -207,8 +207,8 @@ export const Homepage: FC = () => {
                     setSwing={setSwing}
                     setBroken={setBroken}
                     setDepth={setDepth}
-                    mintGem={async () => {
-                      await runMintNFT(1)
+                    mintGem={async (id) => {
+                      await runMintNFT(id)
                       refetchNftBalanceGems()
                     }}
                   />
