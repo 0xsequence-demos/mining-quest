@@ -55,13 +55,16 @@ export const Homepage: FC = () => {
   const {
     data: mintTxnData,
     isPending: isPendingMintTxn,
-    writeContract,
+    writeContractAsync,
   } = useWriteContract();
 
-  const hasPickaxe = typeof nftBalancePickaxe === "bigint" && nftBalancePickaxe > 0n;
-  const gemsOwned = Number(typeof nftBalanceGems === "bigint" ? nftBalanceGems : 0n);
+  const hasPickaxe =
+    typeof nftBalancePickaxe === "bigint" && nftBalancePickaxe > 0n;
+  const gemsOwned = Number(
+    typeof nftBalanceGems === "bigint" ? nftBalanceGems : 0n
+  );
 
-  const runMintNFT = async (itemId:number) => {
+  const runMintNFT = async (itemId: number) => {
     if (!walletClient) {
       return;
     }
@@ -78,7 +81,7 @@ export const Homepage: FC = () => {
     try {
       setMintStatusPickaxe("pending");
 
-      writeContract({
+      await writeContractAsync({
         address: demoNftContractAddress,
         abi: NFT_ABI,
         functionName: "mint",
@@ -86,12 +89,21 @@ export const Homepage: FC = () => {
       });
     } catch (error) {
       console.error("Minting failed:", error);
-      setMintStatusPickaxe("failed");
+      // Type assertion to access error properties safely
+      const err = error as { cause?: { shortMessage?: string } };
+      // this error means wallet is not connected
+      if (err.cause?.shortMessage === "Transaction creation failed.") {
+        disconnectWallet(address as string);
+        setMintStatusPickaxe("notStarted");
+      } else {
+        setMintStatusPickaxe("failed");
+      }
     }
   };
 
   const [mintStatusGem, setMintStatusGem] = useState<MintStatus>("notStarted");
-  const [mintStatusPickaxe, setMintStatusPickaxe] = useState<MintStatus>("notStarted");
+  const [mintStatusPickaxe, setMintStatusPickaxe] =
+    useState<MintStatus>("notStarted");
 
   // Handle mint transaction status changes
   useEffect(() => {
@@ -103,11 +115,20 @@ export const Homepage: FC = () => {
         await refetchNftBalancePickaxe();
         setMintStatusPickaxe("successs");
       }, 1500);
-    } else if (!isPendingMintTxn && !mintTxnData && mintStatusPickaxe === "pending") {
+    } else if (
+      !isPendingMintTxn &&
+      !mintTxnData &&
+      mintStatusPickaxe === "pending"
+    ) {
       // If we were pending but now we're not, and there's no transaction data, it failed
-      setMintStatusPickaxe("failed");
+      // setMintStatusPickaxe("failed");
     }
-  }, [isPendingMintTxn, mintTxnData, mintStatusPickaxe, refetchNftBalancePickaxe]);
+  }, [
+    isPendingMintTxn,
+    mintTxnData,
+    mintStatusPickaxe,
+    refetchNftBalancePickaxe,
+  ]);
 
   // Handle mint transaction status changes
   useEffect(() => {
@@ -119,7 +140,11 @@ export const Homepage: FC = () => {
         await refetchNftBalanceGems();
         setMintStatusGem("successs");
       }, 1500);
-    } else if (!isPendingMintTxn && !mintTxnData && mintStatusGem === "pending") {
+    } else if (
+      !isPendingMintTxn &&
+      !mintTxnData &&
+      mintStatusGem === "pending"
+    ) {
       // If we were pending but now we're not, and there's no transaction data, it failed
       setMintStatusGem("failed");
     }
@@ -208,8 +233,8 @@ export const Homepage: FC = () => {
                     setBroken={setBroken}
                     setDepth={setDepth}
                     mintGem={async (id) => {
-                      await runMintNFT(id)
-                      refetchNftBalanceGems()
+                      await runMintNFT(id);
+                      refetchNftBalanceGems();
                     }}
                   />
                 ) : (
@@ -219,7 +244,17 @@ export const Homepage: FC = () => {
                 )}
               </View3D>
               {hasPickaxe ? (
-                <Hud swing={swing} broken={broken} depth={depth} gems={gemsOwned + (isLoadingNftBalanceGems || mintStatusGem === 'pending' ? "+" : "")} />
+                <Hud
+                  swing={swing}
+                  broken={broken}
+                  depth={depth}
+                  gems={
+                    gemsOwned +
+                    (isLoadingNftBalanceGems || mintStatusGem === "pending"
+                      ? "+"
+                      : "")
+                  }
+                />
               ) : null}
               <Minting
                 hasPickaxe={hasPickaxe}
