@@ -1,5 +1,10 @@
 import { FC, useState, useEffect } from "react";
-import { Text, Spinner, truncateAddress } from "@0xsequence/design-system";
+import {
+  Text,
+  Spinner,
+  truncateAddress,
+  useMediaQuery,
+} from "@0xsequence/design-system";
 import { useKitWallets, useOpenConnectModal } from "@0xsequence/kit";
 import { useOpenWalletModal } from "@0xsequence/kit-wallet";
 
@@ -19,10 +24,21 @@ import MiningGame from "./3d/MiningGame";
 import ItemViewer3D from "./3d/ItemViewer3D";
 import PickAxe, { MintStatus } from "./3d/PickAxe";
 
+const isSafari =
+  navigator.vendor &&
+  navigator.vendor.indexOf("Apple") > -1 &&
+  navigator.userAgent &&
+  navigator.userAgent.indexOf("CriOS") == -1 &&
+  navigator.userAgent.indexOf("FxiOS") == -1;
+
 export const Homepage: FC = () => {
   const { setOpenConnectModal } = useOpenConnectModal();
   const { setOpenWalletModal } = useOpenWalletModal();
   const { wallets, disconnectWallet } = useKitWallets();
+
+  const isMobile = useMediaQuery("isMobile");
+
+  const isMobileOrSafari = isMobile || isSafari;
 
   const { address } = useAccount();
   const { data: walletClient } = useWalletClient();
@@ -164,6 +180,7 @@ export const Homepage: FC = () => {
   const [swing, setSwing] = useState(0);
   const [broken, setBroken] = useState(0);
   const [depth, setDepth] = useState(0);
+  const [pendingGemId, setPendingGemId] = useState<number | null>(null);
   // Check wallet connection after a delay
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -233,8 +250,12 @@ export const Homepage: FC = () => {
                     setBroken={setBroken}
                     setDepth={setDepth}
                     mintGem={async (id) => {
-                      await runMintNFT(id);
-                      refetchNftBalanceGems();
+                      if (isMobileOrSafari) {
+                        setPendingGemId(id);
+                      } else {
+                        await runMintNFT(id);
+                        refetchNftBalanceGems();
+                      }
                     }}
                   />
                 ) : (
@@ -243,19 +264,41 @@ export const Homepage: FC = () => {
                   </ItemViewer3D>
                 )}
               </View3D>
-              {hasPickaxe ? (
-                <Hud
-                  swing={swing}
-                  broken={broken}
-                  depth={depth}
-                  gems={
-                    gemsOwned +
-                    (isLoadingNftBalanceGems || mintStatusGem === "pending"
-                      ? "+"
-                      : "")
-                  }
-                />
-              ) : null}
+              {hasPickaxe && (
+                <>
+                  {isMobileOrSafari && pendingGemId !== null && (
+                    <div className="absolute inset-0 bg-black/50 pointer-events-none" />
+                  )}
+                  {isMobileOrSafari && pendingGemId !== null ? (
+                    <div className="absolute bottom-[2rem] z-10 bg-black p-4 flex flex-col gap-2 max-w-[80%]">
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          const id = pendingGemId;
+                          setPendingGemId(null);
+                          await runMintNFT(id);
+                          refetchNftBalanceGems();
+                        }}
+                        className="cursor-pointer hover:bg-white hover:text-black px-2 underline text-[12px]"
+                      >
+                        [ Mint Gem ]
+                      </button>
+                    </div>
+                  ) : (
+                    <Hud
+                      swing={swing}
+                      broken={broken}
+                      depth={depth}
+                      gems={
+                        gemsOwned +
+                        (isLoadingNftBalanceGems || mintStatusGem === "pending"
+                          ? "+"
+                          : "")
+                      }
+                    />
+                  )}
+                </>
+              )}
               <Minting
                 hasPickaxe={hasPickaxe}
                 mintStatus={mintStatusPickaxe}
