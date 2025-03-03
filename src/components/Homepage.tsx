@@ -3,7 +3,6 @@ import {
   Text,
   Spinner,
   truncateAddress,
-  useMediaQuery,
 } from "@0xsequence/design-system";
 import { useKitWallets, useOpenConnectModal } from "@0xsequence/kit";
 import { useOpenWalletModal } from "@0xsequence/kit-wallet";
@@ -24,21 +23,10 @@ import MiningGame from "./3d/MiningGame";
 import ItemViewer3D from "./3d/ItemViewer3D";
 import PickAxe, { MintStatus } from "./3d/PickAxe";
 
-const isSafari =
-  navigator.vendor &&
-  navigator.vendor.indexOf("Apple") > -1 &&
-  navigator.userAgent &&
-  navigator.userAgent.indexOf("CriOS") == -1 &&
-  navigator.userAgent.indexOf("FxiOS") == -1;
-
 export const Homepage: FC = () => {
   const { setOpenConnectModal } = useOpenConnectModal();
   const { setOpenWalletModal } = useOpenWalletModal();
   const { wallets, disconnectWallet } = useKitWallets();
-
-  const isMobile = useMediaQuery("isMobile");
-
-  const isMobileOrSafari = isMobile || isSafari;
 
   const { address } = useAccount();
   const { data: walletClient } = useWalletClient();
@@ -47,25 +35,14 @@ export const Homepage: FC = () => {
   const { switchChainAsync } = useSwitchChain();
 
   const {
-    data: nftBalancePickaxe,
-    isLoading: isLoadingNftBalancePickaxe,
-    refetch: refetchNftBalancePickaxe,
+    data: nftBalances,
+    isLoading: isLoadingNftBalances,
+    refetch: refetchNftBalances,
   } = useReadContract({
     address: demoNftContractAddress,
     abi: NFT_ABI,
-    functionName: "balanceOf",
-    args: address ? [address, 0n] : undefined,
-  });
-
-  const {
-    data: nftBalanceGems,
-    isLoading: isLoadingNftBalanceGems,
-    refetch: refetchNftBalanceGems,
-  } = useReadContract({
-    address: demoNftContractAddress,
-    abi: NFT_ABI,
-    functionName: "balanceOf",
-    args: address ? [address, 2n] : undefined,
+    functionName: "balanceOfBatch",
+    args: address ? [[address, address, address], [0n, 1n, 2n]] : undefined,
   });
 
   const {
@@ -74,17 +51,16 @@ export const Homepage: FC = () => {
     writeContractAsync,
   } = useWriteContract();
 
-  const hasPickaxe =
-    typeof nftBalancePickaxe === "bigint" && nftBalancePickaxe > 0n;
-  const gemsOwned = Number(
-    typeof nftBalanceGems === "bigint" ? nftBalanceGems : 0n
-  );
+  const hasPickaxe = nftBalances instanceof Array && typeof nftBalances[0] === "bigint" && nftBalances[0] > 0n;
 
-  const runMintNFT = async (itemId: number) => {
+  const [tempGemsMoon, setTempGemsMoon] = useState(0)
+  const [tempGemsSun, setTempGemsSun] = useState(0)
+
+  const runMintNFTs = async (itemIds:bigint[], itemAmts:bigint[]) => {
     if (!walletClient) {
       return;
     }
-
+    
     // check if we're on the right chain
     if (chainId !== demoNftContractChainId) {
       try {
@@ -93,15 +69,15 @@ export const Homepage: FC = () => {
         console.error("Failed to switch chain:", e);
       }
     }
-
+    const args = [itemIds, itemAmts]
+    console.log('batchMint args:', args)
     try {
-      setMintStatusPickaxe("pending");
-
-      await writeContractAsync({
+      setMintStatus("pending");
+      writeContractAsync({
         address: demoNftContractAddress,
         abi: NFT_ABI,
-        functionName: "mint",
-        args: [itemId],
+        functionName: "batchMint",
+        args,
       });
     } catch (error) {
       console.error("Minting failed:", error);
@@ -110,61 +86,31 @@ export const Homepage: FC = () => {
       // this error means wallet is not connected
       if (err.cause?.shortMessage === "Transaction creation failed.") {
         disconnectWallet(address as string);
-        setMintStatusPickaxe("notStarted");
+        setMintStatus("notStarted");
       } else {
-        setMintStatusPickaxe("failed");
+        setMintStatus("failed");
       }
     }
   };
 
-  const [mintStatusGem, setMintStatusGem] = useState<MintStatus>("notStarted");
-  const [mintStatusPickaxe, setMintStatusPickaxe] =
-    useState<MintStatus>("notStarted");
+  const [mintStatus, setMintStatus] = useState<MintStatus>("notStarted");
 
   // Handle mint transaction status changes
   useEffect(() => {
     if (isPendingMintTxn) {
-      setMintStatusPickaxe("pending");
+      setMintStatus("pending");
     } else if (mintTxnData) {
       // add a bit of delay before setting the demo mode to play
       setTimeout(async () => {
-        await refetchNftBalancePickaxe();
-        setMintStatusPickaxe("successs");
+        await refetchNftBalances();
+        setMintStatus("successs");
       }, 1500);
-    } else if (
-      !isPendingMintTxn &&
-      !mintTxnData &&
-      mintStatusPickaxe === "pending"
-    ) {
+    } else if (!isPendingMintTxn && !mintTxnData && mintStatus === "pending") {
       // If we were pending but now we're not, and there's no transaction data, it failed
-      // setMintStatusPickaxe("failed");
+      console.warn('mint failed?')
+      setMintStatus("failed");
     }
-  }, [
-    isPendingMintTxn,
-    mintTxnData,
-    mintStatusPickaxe,
-    refetchNftBalancePickaxe,
-  ]);
-
-  // Handle mint transaction status changes
-  useEffect(() => {
-    if (isPendingMintTxn) {
-      setMintStatusGem("pending");
-    } else if (mintTxnData) {
-      // add a bit of delay before setting the demo mode to play
-      setTimeout(async () => {
-        await refetchNftBalanceGems();
-        setMintStatusGem("successs");
-      }, 1500);
-    } else if (
-      !isPendingMintTxn &&
-      !mintTxnData &&
-      mintStatusGem === "pending"
-    ) {
-      // If we were pending but now we're not, and there's no transaction data, it failed
-      setMintStatusGem("failed");
-    }
-  }, [isPendingMintTxn, mintTxnData, refetchNftBalanceGems, mintStatusGem]);
+  }, [isPendingMintTxn, mintTxnData, mintStatus, refetchNftBalances]);
 
   // Set demo mode based on pickaxe ownership
   useEffect(() => {
@@ -177,10 +123,6 @@ export const Homepage: FC = () => {
 
   const [demoMode, setDemoMode] = useState<"mint" | "play">("mint");
   const [isCheckingWallet, setIsCheckingWallet] = useState(true);
-  const [swing, setSwing] = useState(0);
-  const [broken, setBroken] = useState(0);
-  const [depth, setDepth] = useState(0);
-  const [pendingGemId, setPendingGemId] = useState<number | null>(null);
   // Check wallet connection after a delay
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -190,7 +132,7 @@ export const Homepage: FC = () => {
   }, []);
 
   // Show loading state while checking wallet or NFT balance
-  if (isCheckingWallet || (wallets.length > 0 && isLoadingNftBalancePickaxe)) {
+  if (isCheckingWallet || (wallets.length > 0 && isLoadingNftBalances)) {
     return (
       <div
         style={{
@@ -246,63 +188,36 @@ export const Homepage: FC = () => {
               <View3D env={demoMode === "play" ? "mine" : "item"}>
                 {demoMode === "play" ? (
                   <MiningGame
-                    setSwing={setSwing}
-                    setBroken={setBroken}
-                    setDepth={setDepth}
-                    mintGem={async (id) => {
-                      if (isMobileOrSafari) {
-                        setPendingGemId(id);
-                      } else {
-                        await runMintNFT(id);
-                        refetchNftBalanceGems();
-                      }
-                    }}
-                  />
+                  collectGemMoon={() => setTempGemsMoon(tempGemsMoon+1)}
+                  collectGemSun={() => setTempGemsSun(tempGemsSun+1)}
+              />
                 ) : (
                   <ItemViewer3D>
-                    <PickAxe mintStatus={mintStatusPickaxe} />
+                    <PickAxe mintStatus={mintStatus} />
                   </ItemViewer3D>
                 )}
               </View3D>
-              {hasPickaxe && (
-                <>
-                  {isMobileOrSafari && pendingGemId !== null && (
-                    <div className="absolute inset-0 bg-black/50 pointer-events-none" />
-                  )}
-                  {isMobileOrSafari && pendingGemId !== null ? (
-                    <div className="absolute bottom-[2rem] z-10 bg-black p-4 flex flex-col gap-2 max-w-[80%]">
-                      <button
-                        type="button"
-                        onClick={async () => {
-                          const id = pendingGemId;
-                          setPendingGemId(null);
-                          await runMintNFT(id);
-                          refetchNftBalanceGems();
-                        }}
-                        className="cursor-pointer hover:bg-white hover:text-black px-2 underline text-[12px]"
-                      >
-                        [ Mint Gem ]
-                      </button>
-                    </div>
-                  ) : (
-                    <Hud
-                      swing={swing}
-                      broken={broken}
-                      depth={depth}
-                      gems={
-                        gemsOwned +
-                        (isLoadingNftBalanceGems || mintStatusGem === "pending"
-                          ? "+"
-                          : "")
-                      }
-                    />
-                  )}
-                </>
-              )}
+              {hasPickaxe ? (
+                <Hud gemsMoon={tempGemsMoon} gemsSun={tempGemsSun} mintGems={() => {
+                  const ids: bigint[] = [];
+                  const amts: bigint[] = [];
+                  if (tempGemsSun > 0) {
+                    ids.push(1n);
+                    amts.push(BigInt(tempGemsSun));
+                  }
+                  if (tempGemsMoon > 0) {
+                    ids.push(2n);
+                    amts.push(BigInt(tempGemsMoon));
+                  }
+                  setTempGemsMoon(0);
+                  setTempGemsSun(0);
+                  runMintNFTs(ids, amts);
+                } } minting={mintStatus === "pending"}/>
+              ) : null}
               <Minting
                 hasPickaxe={hasPickaxe}
-                mintStatus={mintStatusPickaxe}
-                runMintNFT={() => runMintNFT(0)}
+                mintStatus={mintStatus}
+                runMintNFT={() => runMintNFTs([0n], [1n])}
               />
             </>
           ) : (
@@ -401,30 +316,26 @@ function Minting({
 }
 
 function Hud({
-  swing,
-  broken,
-  depth,
-  gems,
+  gemsSun,
+  gemsMoon,
+  mintGems,
+  minting,
 }: {
-  swing: number;
-  broken: number;
-  depth: number;
-  gems: string | number;
+  gemsSun: number;
+  gemsMoon: number;
+  mintGems: () => void;
+  minting: boolean;
 }) {
-  return (
-    <div className="absolute bottom-[2rem] bg-black p-2 md:p-4  max-w-[90%] md:max-w-[80%] data-[visible='false']:opacity-0 transition-all data-[visible='false']:translate-y-12 pointer-events-none flex gap-9 text-[8px] md:text-[10px]">
-      <span>
-        Swings <span className="text-green-500">[{swing}]</span>
-      </span>
-      <span>
-        Broken <span className="text-green-500">[{broken}]</span>
-      </span>
-      <span>
-        Depth <span className="text-green-500">[{depth}]</span>
-      </span>
-      <span>
-        Gems <span className="text-green-500">[{gems}]</span>
-      </span>
+  const total = gemsSun + gemsMoon
+  return total === 0 && !minting ? null : (
+      <div className="absolute bottom-[2rem] z-1 w-full pt-6 text-[10px] md:text-[12px] font-medium flex justify-center gap-1 md:gap-2 ">
+                    <button
+                      type="button"
+                      onClick={minting ? () => {} : mintGems}
+                      className="cursor-pointer hover:bg-white hover:text-black bg-black px-2 whitespace-nowrap"
+                    >
+                      {minting ? "Minting..." : `[ Mint ${total} Gem${total===1?"" :"s"} ]`}
+                    </button>
     </div>
   );
 }
