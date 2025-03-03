@@ -17,12 +17,6 @@ import {
 import Rock from "./Rock";
 import { lightColors } from "./lightColors";
 
-function allSame(arr: number[]) {
-  return arr.length > 0 && arr.every((val) => val === arr[0])
-    ? arr[0]
-    : undefined;
-}
-
 const chunkNames = ["xs", "s", "m", "l"];
 
 const upright = new Quaternion()
@@ -53,15 +47,11 @@ const pickaxeHomeQuaternion = new Quaternion().setFromEuler(
 );
 
 function MiningGame({
-  setSwing,
-  setBroken,
-  setDepth,
-  mintGem,
+  collectGemSun,
+  collectGemMoon,
 }: {
-  setSwing: React.Dispatch<React.SetStateAction<number>>;
-  setBroken: React.Dispatch<React.SetStateAction<number>>;
-  setDepth: React.Dispatch<React.SetStateAction<number>>;
-  mintGem: (id:number)=>void;
+  collectGemSun: ()=>void;
+  collectGemMoon: ()=>void;
 }) {
   const { nodes: nodesPickaxe } = useGLTF("/pickaxe-iron.glb");
   const { nodes: nodesMine } = useGLTF("/rock-mine.glb");
@@ -134,10 +124,6 @@ function MiningGame({
   const [rockDepths, setRockDepths] = useState(
     Array.from({ length: 16 }, () => 0),
   );
-
-  if (allSame(rockDepths)) {
-    setDepth(rockDepths[0]);
-  }
 
   const [rockHighlights, setRockHighlights] = useState(
     Array.from({ length: 16 }, () => false),
@@ -369,7 +355,7 @@ function MiningGame({
                 const newGemIndex = gemIndex+32+~~(Math.random()*16*2)
                 setGemIndex(newGemIndex)
                 const gemType = currentGemType
-                setTimeout(() => mintGem(gemType === "sun" ? 1 : 2), 1000);
+                setTimeout(() => gemType === "sun" ? collectGemSun() : collectGemMoon(), 500);
                 setCurrentGemType(Math.random() > 0.66 ? "sun" : "moon")
                 rockHealths[i] = newRockIndex === newGemIndex ? 10 : 3;
               } else {
@@ -381,12 +367,10 @@ function MiningGame({
           if (info.candidates.length > 0) {
             if (cracked > 0) {
               [sfxHeavy1, sfxHeavy2][~~(Math.random() * 2)]();
-              setBroken((current) => (current += cracked));
             } else if (info.candidates.length === 1) {
               [sfxLight1, sfxLight2, sfxLight3, sfxLight4][
                 ~~(Math.random() * 4)
               ]();
-              setSwing((c) => (c += 1));
             } else {
               [
                 sfxMedium1,
@@ -396,7 +380,6 @@ function MiningGame({
                 sfxMedium5,
                 sfxMedium6,
               ][~~(Math.random() * 6)]();
-              setSwing((c) => (c += 1));
             }
             if (myFlash.current) {
               myFlash.current.scale.setScalar(0.5);
