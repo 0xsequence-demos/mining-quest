@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from "react";
-import { Text, Spinner, truncateAddress } from "@0xsequence/design-system";
+import { Spinner, truncateAddress } from "@0xsequence/design-system";
 import { useKitWallets, useOpenConnectModal } from "@0xsequence/kit";
 import { useOpenWalletModal } from "@0xsequence/kit-wallet";
 
