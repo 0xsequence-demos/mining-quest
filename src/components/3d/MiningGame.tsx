@@ -38,7 +38,7 @@ function indexToCoord(i: number) {
   return { x, y };
 }
 
-const gemDestination = new Vector3(-0.75, 2.5, -2);
+const gemDestination = new Vector3(0, -2.5, -2);
 
 const pickaxeHomePosition = new Vector3(0.75, -1.25, 2);
 const pickaxeHomeRotation = new Euler(0, -1.25, -0.75);
@@ -176,7 +176,7 @@ function MiningGame({
   ) => {
     if (!myGroup.current) {
       return;
-    }    
+    }
     const { x, y } = indexToCoord(i);
     const meshPrize = new Mesh(protoMesh.geometry, protoMesh.material);
     myGroup.current.add(meshPrize);
