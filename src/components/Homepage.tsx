@@ -47,7 +47,7 @@ export const Homepage: FC = () => {
       : undefined,
   });
 
-  function parseGems(int: BigInt) {
+  function parseGems(int: bigint) {
     const value = parseInt(int.toString());
     console.log(value);
     return value < 10 ? `0${value.toString()}` : value.toString();
