@@ -1,9 +1,5 @@
 import { FC, useState, useEffect } from "react";
-import {
-  Text,
-  Spinner,
-  truncateAddress,
-} from "@0xsequence/design-system";
+import { Text, Spinner, truncateAddress } from "@0xsequence/design-system";
 import { useKitWallets, useOpenConnectModal } from "@0xsequence/kit";
 import { useOpenWalletModal } from "@0xsequence/kit-wallet";
 
@@ -42,7 +38,12 @@ export const Homepage: FC = () => {
     address: demoNftContractAddress,
     abi: NFT_ABI,
     functionName: "balanceOfBatch",
-    args: address ? [[address, address, address], [0n, 1n, 2n]] : undefined,
+    args: address
+      ? [
+          [address, address, address],
+          [0n, 1n, 2n],
+        ]
+      : undefined,
   });
 
   const {
@@ -51,16 +52,19 @@ export const Homepage: FC = () => {
     writeContractAsync,
   } = useWriteContract();
 
-  const hasPickaxe = nftBalances instanceof Array && typeof nftBalances[0] === "bigint" && nftBalances[0] > 0n;
+  const hasPickaxe =
+    nftBalances instanceof Array &&
+    typeof nftBalances[0] === "bigint" &&
+    nftBalances[0] > 0n;
 
-  const [tempGemsMoon, setTempGemsMoon] = useState(0)
-  const [tempGemsSun, setTempGemsSun] = useState(0)
+  const [tempGemsMoon, setTempGemsMoon] = useState(0);
+  const [tempGemsSun, setTempGemsSun] = useState(0);
 
-  const runMintNFTs = async (itemIds:bigint[], itemAmts:bigint[]) => {
+  const runMintNFTs = async (itemIds: bigint[], itemAmts: bigint[]) => {
     if (!walletClient) {
       return;
     }
-    
+
     // check if we're on the right chain
     if (chainId !== demoNftContractChainId) {
       try {
@@ -69,8 +73,8 @@ export const Homepage: FC = () => {
         console.error("Failed to switch chain:", e);
       }
     }
-    const args = [itemIds, itemAmts]
-    console.log('batchMint args:', args)
+    const args = [itemIds, itemAmts];
+    console.log("batchMint args:", args);
     try {
       setMintStatus("pending");
       writeContractAsync({
@@ -107,7 +111,7 @@ export const Homepage: FC = () => {
       }, 1500);
     } else if (!isPendingMintTxn && !mintTxnData && mintStatus === "pending") {
       // If we were pending but now we're not, and there's no transaction data, it failed
-      console.warn('mint failed?')
+      console.warn("mint failed?");
       setMintStatus("failed");
     }
   }, [isPendingMintTxn, mintTxnData, mintStatus, refetchNftBalances]);
@@ -164,33 +168,84 @@ export const Homepage: FC = () => {
             <>
               {address && (
                 <>
-                  <div className="absolute top-0 z-1 w-full pt-6 text-[10px] md:text-[12px] font-medium flex justify-center gap-1 md:gap-2 ">
-                    <button
+                  <div className="absolute top-0 z-1 size-full py-8 text-[10px] md:text-[12px] font-medium flex justify-between  items-start px-12 gap-1 md:gap-2 pointer-events-none [background-image:url('/hud/cave-bg@2x.webp')] bg-contain bg-no-repeat">
+                    {/* <button
                       type="button"
-                      onClick={() => setOpenWalletModal(true)}
+
                       className="cursor-pointer hover:bg-white hover:text-black bg-black px-2 whitespace-nowrap"
                     >
                       [ Inventory ]
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => disconnectWallet(address)}
-                      className="cursor-pointer hover:bg-white hover:text-black bg-black px-2 whitespace-nowrap"
-                    >
-                      [ Disconnect ]
-                    </button>
+                    </button> */}
+                    <div className="flex w-full justify-between items-center gap-4">
+                      <ActionButton
+                        label="Inventory"
+                        onClick={() => setOpenWalletModal(true)}
+                      >
+                        <span className="z-1 mt-auto mb-1 group-hover:translate-y-[1px] transition-transform group-hover:scale-95">
+                          <Overlay>
+                            <TextStroke
+                              textStroke="text-stroke-5"
+                              textColor="text-[#ffff84]"
+                              strokeColor="text-[#252525]"
+                              className="text-18 whitespace-nowrap"
+                            >
+                              {truncateAddress(address as string, 2, 3)}
+                            </TextStroke>
+                          </Overlay>
+                        </span>
+
+                        <img
+                          src="/hud/inventory@2x.webp"
+                          width="33"
+                          height="37"
+                          alt=""
+                          className="absolute z-0 mb-1 group-hover:-translate-y-0.75 group-hover:scale-105 transition-transform"
+                        />
+                      </ActionButton>
+
+                      <span className="size-16 flex items-center justify-center flex-col ml-0 mr-auto">
+                        <Overlay>
+                          <img
+                            src="/hud/gems@2x.webp"
+                            width="58"
+                            height="36"
+                            className="mb-4"
+                          />
+                          <Overlay>
+                            <TextStroke
+                              textStroke="text-stroke-7"
+                              textColor="text-[#ffff84]"
+                              strokeColor="text-[#252525]"
+                              className="text-29 whitespace-nowrap mt-4"
+                            >
+                              8
+                            </TextStroke>
+                          </Overlay>
+                        </Overlay>
+                      </span>
+
+                      <ActionButton
+                        label="Disconnect"
+                        onClick={() => disconnectWallet(address)}
+                      >
+                        <img
+                          src="/hud/logout@2x.webp"
+                          width="36"
+                          alt=""
+                          className="absolute z-0  group-hover:-translate-y-0.75 group-hover:scale-105 transition-transform"
+                        />
+                      </ActionButton>
+                    </div>
                   </div>
-                  <div className="absolute bottom-0 z-1 w-full pb-2 text-[10px] md:text-[12px] font-medium flex justify-center gap-1 md:gap-2 ">
-                    {truncateAddress(address as string, 4, 4)}
-                  </div>
+                  <div className="absolute bottom-0 z-1 w-full pb-2 text-[10px] md:text-[12px] font-medium flex justify-center gap-1 md:gap-2 "></div>
                 </>
               )}
               <View3D env={demoMode === "play" ? "mine" : "item"}>
                 {demoMode === "play" ? (
                   <MiningGame
-                  collectGemMoon={() => setTempGemsMoon(tempGemsMoon+1)}
-                  collectGemSun={() => setTempGemsSun(tempGemsSun+1)}
-              />
+                    collectGemMoon={() => setTempGemsMoon(tempGemsMoon + 1)}
+                    collectGemSun={() => setTempGemsSun(tempGemsSun + 1)}
+                  />
                 ) : (
                   <ItemViewer3D>
                     <PickAxe mintStatus={mintStatus} />
@@ -198,21 +253,26 @@ export const Homepage: FC = () => {
                 )}
               </View3D>
               {hasPickaxe ? (
-                <Hud gemsMoon={tempGemsMoon} gemsSun={tempGemsSun} mintGems={() => {
-                  const ids: bigint[] = [];
-                  const amts: bigint[] = [];
-                  if (tempGemsSun > 0) {
-                    ids.push(1n);
-                    amts.push(BigInt(tempGemsSun));
-                  }
-                  if (tempGemsMoon > 0) {
-                    ids.push(2n);
-                    amts.push(BigInt(tempGemsMoon));
-                  }
-                  setTempGemsMoon(0);
-                  setTempGemsSun(0);
-                  runMintNFTs(ids, amts);
-                } } minting={mintStatus === "pending"}/>
+                <Hud
+                  gemsMoon={tempGemsMoon}
+                  gemsSun={tempGemsSun}
+                  mintGems={() => {
+                    const ids: bigint[] = [];
+                    const amts: bigint[] = [];
+                    if (tempGemsSun > 0) {
+                      ids.push(1n);
+                      amts.push(BigInt(tempGemsSun));
+                    }
+                    if (tempGemsMoon > 0) {
+                      ids.push(2n);
+                      amts.push(BigInt(tempGemsMoon));
+                    }
+                    setTempGemsMoon(0);
+                    setTempGemsSun(0);
+                    runMintNFTs(ids, amts);
+                  }}
+                  minting={mintStatus === "pending"}
+                />
               ) : null}
               <Minting
                 hasPickaxe={hasPickaxe}
@@ -326,16 +386,18 @@ function Hud({
   mintGems: () => void;
   minting: boolean;
 }) {
-  const total = gemsSun + gemsMoon
+  const total = gemsSun + gemsMoon;
   return total === 0 && !minting ? null : (
-      <div className="absolute bottom-[2rem] z-1 w-full pt-6 text-[10px] md:text-[12px] font-medium flex justify-center gap-1 md:gap-2 ">
-                    <button
-                      type="button"
-                      onClick={minting ? () => {} : mintGems}
-                      className="cursor-pointer hover:bg-white hover:text-black bg-black px-2 whitespace-nowrap"
-                    >
-                      {minting ? "Minting..." : `[ Mint ${total} Gem${total===1?"" :"s"} ]`}
-                    </button>
+    <div className="absolute bottom-[2rem] z-1 w-full pt-6 text-[10px] md:text-[12px] font-medium flex justify-center gap-1 md:gap-2 ">
+      <button
+        type="button"
+        onClick={minting ? () => {} : mintGems}
+        className="cursor-pointer hover:bg-white hover:text-black bg-black px-2 whitespace-nowrap"
+      >
+        {minting
+          ? "Minting..."
+          : `[ Mint ${total} Gem${total === 1 ? "" : "s"} ]`}
+      </button>
     </div>
   );
 }
@@ -356,5 +418,76 @@ function ReadyToMine() {
     >
       Ready to mine!
     </div>
+  );
+}
+
+function ActionButton(
+  props: {
+    children: React.ReactNode;
+    label: string;
+  } & React.ComponentProps<"button">,
+) {
+  const { label, children, ...rest } = props;
+
+  return (
+    <button
+      type="button"
+      className="group size-16 rounded-full bg-gradient-to-b from-[#332D24] to-[#34302C] p-0.75 flex items-center justify-center relative pointer-events-auto cursor-pointer mix-blend-hard-light"
+      {...rest}
+    >
+      <span className="flex items-center justify-center size-full bg-gradient-to-b from-[#B08D5C] to-[#2F1E0E] rounded-full p-0.5 ">
+        <span className="flex items-center justify-center size-full bg-gradient-to-b from-[#9B8569] to-[#473117] rounded-full p-0.75  ">
+          <span className="flex items-center justify-center size-full bg-gradient-to-b from-[#BC8F61] to-[#7A654E] rounded-full p-0.5  "></span>
+        </span>
+      </span>
+      <span className="size-full inset-0 absolute flex items-center justify-center z-50">
+        {children}
+      </span>
+      <span className="sr-only">{label}</span>
+    </button>
+  );
+}
+
+function TextStroke(
+  props: {
+    strokeColor: string;
+    textColor: string;
+    textStroke: string;
+    children: string;
+  } & React.ComponentProps<"span">,
+) {
+  const {
+    children,
+    textColor,
+    strokeColor,
+    textStroke,
+    className = "",
+    ...rest
+  } = props;
+
+  return (
+    <>
+      <span
+        {...rest}
+        className={`${className} ${strokeColor} ${textStroke}`}
+        // className="text-16 whitespace-nowrap mt-auto mb-0 text-[#252525] col-start-1 row-start-1 "
+        aria-hidden="true"
+      >
+        {children}
+      </span>
+      <span className={`${className} ${textColor}`} {...rest}>
+        {children}
+      </span>
+    </>
+  );
+}
+
+function Overlay(props: { children: React.ReactNode }) {
+  const { children } = props;
+
+  return (
+    <span className="grid grid-cols-1 grid-rows-1 justify-items-center [&>*]:col-start-1 [&>*]:row-start-1">
+      {children}
+    </span>
   );
 }

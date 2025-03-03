@@ -1,19 +1,30 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "'Press Start 2P'", serif;
+  --font-sans: Fredoka, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --base-unit: 16;
+}
+
+@utility text-* {
+  font-size: calc(--value(integer) / var(--base-unit) * 1rem);
+}
+
+@utility text-stroke-* {
+  -webkit-text-stroke-width: calc(--value(integer) * 1px);
 }
 
 :root {
-  font-family: "Press Start 2P", system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: Fredoka, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 600;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
 }
