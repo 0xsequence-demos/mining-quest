@@ -151,7 +151,6 @@ export const Homepage: FC = () => {
     }, 500);
     return () => clearTimeout(timer);
   }, []);
-
   // Show loading state while checking wallet or NFT balance
   if (isCheckingWallet || (wallets.length > 0 && isLoadingNftBalances)) {
     return (
