@@ -168,27 +168,21 @@ export const Homepage: FC = () => {
 
   return (
     <div className="flex flex-1 items-center justify-center w-full h-full">
-      <div className="relative w-full aspect-square md:aspect-[1.31/1] md:max-w-screen-lg">
+      <div className="relative w-full aspect-square md:aspect-[1.31/1] md:max-w-screen-lg mx-2 md:mx-auto">
         <img
           src="/tvframe.webp"
-          className="object-cover relative pointer-events-none z-10 hidden md:block"
+          className="object-cover relative pointer-events-none z-10 hidden  md:block"
         />
+
         <div
-          className="md:w-[60%] md:h-[67%] md:absolute md:left-[8.64%] md:top-[12.17%] size-full md:size-auto z-1 bg-neutral-600 flex flex-col items-center justify-end"
+          className="md:w-[60%] md:h-[67%] md:absolute md:left-[8.64%] md:top-[12.17%] md:size-auto z-1 flex flex-col items-center justify-end rounded-xl md:rounded-none overflow-clip"
           data-id="screen"
         >
           {wallets.length > 0 ? (
             <>
               {address && (
                 <>
-                  <div className="absolute top-0 z-1 size-full py-8 text-[10px] md:text-[12px] font-medium flex justify-between items-start px-14 gap-2 md:gap-2 pointer-events-none">
-                    {/* <button
-                      type="button"
-
-                      className="cursor-pointer hover:bg-white hover:text-black bg-black px-2 whitespace-nowrap"
-                    >
-                      [ Inventory ]
-                    </button> */}
+                  <div className="md:absolute top-0 z-1 md:size-full md:py-8 -mb-8 text-[10px] md:text-[12px] font-medium flex justify-between items-start md:px-14 gap-2 md:gap-2 pointer-events-none w-full px-0 scale-85 md:scale-100">
                     <div className="flex w-full justify-between items-center gap-6">
                       {demoMode === "play" ? (
                         <>
@@ -199,7 +193,7 @@ export const Homepage: FC = () => {
                               onClick={() => setOpenWalletModal(true)}
                               style={{} as React.CSSProperties}
                             >
-                              <span className="z-1 mt-auto mb-1 group-hover:translate-y-[1px] transition-transform group-hover:scale-95">
+                              <span className="z-1 mt-auto mb-1 flex-shrink-0 group-hover:translate-y-[1px] transition-transform group-hover:scale-95">
                                 <Overlay>
                                   <TextStroke
                                     textStroke="text-stroke-5"
@@ -211,7 +205,6 @@ export const Homepage: FC = () => {
                                   </TextStroke>
                                 </Overlay>
                               </span>
-
                               <img
                                 src="/hud/inventory@2x.webp"
                                 width="33"
@@ -258,6 +251,7 @@ export const Homepage: FC = () => {
                   <div className="absolute bottom-0 z-1 w-full pb-2 text-[10px] md:text-[12px] font-medium flex justify-center gap-1 md:gap-2 "></div>
                 </>
               )}
+
               <View3D env={demoMode === "play" ? "mine" : "item"}>
                 {demoMode === "play" ? (
                   <MiningGame
