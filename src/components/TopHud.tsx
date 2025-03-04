@@ -26,10 +26,9 @@ export function TopHud(props: TopHudProps) {
     if (mintStatus === "success") {
       setRecentMint(true);
       claimGem();
-      setTimeout(() => setRecentMint(false), 1000);
+      setTimeout(() => setRecentMint(false), 500);
     }
   }, [mintStatus]);
-
   if (!address) return null;
 
   return (
