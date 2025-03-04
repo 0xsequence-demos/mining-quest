@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { useSpring, animated } from "@react-spring/three";
 import { BufferGeometry, Group, Material, Mesh } from "three";
 
-export type MintStatus = "notStarted" | "pending" | "successs" | "failed";
+export type MintStatus = "notStarted" | "pending" | "success" | "failed";
 
 function PickAxe3D(props: { mintStatus: MintStatus }) {
   const { mintStatus } = props;
@@ -26,7 +26,7 @@ function PickAxe3D(props: { mintStatus: MintStatus }) {
   return (
     <group rotation={[0.5, 0, -0.25]}>
       <group ref={myGroup}>
-        {mintStatus === "successs" ? (
+        {mintStatus === "success" ? (
           <Clone
             scale={[5, 5, 5]}
             position={[0, -1.75, 0]}
