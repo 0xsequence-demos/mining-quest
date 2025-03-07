@@ -174,10 +174,10 @@ export const Homepage: FC = () => {
       <div className="relative w-full aspect-square md:aspect-[1.31/1] md:max-w-screen-lg mx-2 md:mx-auto">
         <img
           src="/tvframe.webp"
-          className="object-cover relative pointer-events-none z-10 hidden  md:block"
+          className="object-cover relative pointer-events-none z-10 hidden md:block"
         />
         <div
-          className="md:w-[60%] md:h-[67%] md:absolute md:left-[8.64%] md:top-[12.17%] md:size-auto z-1 flex flex-col items-center justify-end"
+          className="md:w-[60%] md:h-[67%] md:absolute md:left-[8.64%] md:top-[12.17%] size-full md:size-auto z-1 flex flex-col items-center justify-end"
           data-id="screen"
         >
           {wallets.length > 0 ? (
