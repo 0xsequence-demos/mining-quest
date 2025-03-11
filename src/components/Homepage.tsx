@@ -59,7 +59,7 @@ export const Homepage: FC = () => {
   const gemsMinted = parseGems(
     nftBalances && Array.isArray(nftBalances)
       ? nftBalances[1] + nftBalances[2]
-      : 0n,
+      : 0n
   );
 
   const {
@@ -93,7 +93,7 @@ export const Homepage: FC = () => {
     console.log("batchMint args:", args);
     try {
       setMintStatus("pending");
-      writeContractAsync({
+      await writeContractAsync({
         address: demoNftContractAddress,
         abi: NFT_ABI,
         functionName: "batchMint",
