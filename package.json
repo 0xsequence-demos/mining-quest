@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@0xsequence/design-system": "^2.0.10",
-    "@0xsequence/connect": "5.0.0-ecosystem-beta.1",
-    "@0xsequence/wallet-widget": "5.0.0-ecosystem-beta.1",
+    "@0xsequence/connect": "5.0.2-ecosystem-beta.0",
+    "@0xsequence/wallet-widget": "5.0.2-ecosystem-beta.0",
     "@0xsequence/network": ">= 2.2.13",
     "@0xsequence/waas": ">= 2.2.13",
     "@headlessui/react": "^2.2.0",
