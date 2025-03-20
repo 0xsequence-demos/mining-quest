@@ -46,10 +46,8 @@ export const config = createConfig("waas", {
   ecosystem: {
     walletUrl: walletAppUrl,
     name: walletAppName,
-    projectAccessKey,
     logoLight: LogoImg(walletLogo),
     logoDark: LogoImg(walletLogo),
-    defaultNetwork: demoNftContractChainId,
   },
   walletConnect: {
     projectId: walletConnectProjectId,
