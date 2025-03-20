@@ -1,4 +1,4 @@
-import { KitConfig, createConfig } from "@0xsequence/kit";
+import { ConnectConfig, createConfig } from "@0xsequence/connect";
 
 import LogoImg from "./components/Logo.tsx";
 
@@ -18,7 +18,7 @@ const walletConnectProjectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID;
 
 const walletAppUrl = import.meta.env.VITE_WALLET_APP_URL;
 
-export const kitConfig: KitConfig = {
+export const connectConfig: ConnectConfig = {
   projectAccessKey,
   defaultTheme: "dark",
   signIn: {
@@ -34,7 +34,7 @@ export const kitConfig: KitConfig = {
 };
 
 export const config = createConfig("waas", {
-  ...kitConfig,
+  ...connectConfig,
   appName: GAME_NAME,
   chainIds: [demoNftContractChainId],
   defaultChainId: demoNftContractChainId,

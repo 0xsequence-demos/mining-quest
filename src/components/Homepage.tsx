@@ -1,6 +1,6 @@
 import { FC, useState, useEffect } from "react";
 import { Spinner } from "@0xsequence/design-system";
-import { useKitWallets, useOpenConnectModal } from "@0xsequence/kit";
+import { useWallets, useOpenConnectModal } from "@0xsequence/connect";
 
 import {
   useAccount,
@@ -26,7 +26,7 @@ import { TopHud } from "./TopHud";
 export const Homepage: FC = () => {
   const { setOpenConnectModal } = useOpenConnectModal();
 
-  const { wallets, disconnectWallet } = useKitWallets();
+  const { wallets, disconnectWallet } = useWallets();
 
   const { address } = useAccount();
   const { data: walletClient } = useWalletClient();

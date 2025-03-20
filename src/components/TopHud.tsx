@@ -1,6 +1,6 @@
 import { truncateAddress } from "@0xsequence/design-system";
 import { ActionButton } from "./ActionButton";
-import { useOpenWalletModal } from "@0xsequence/kit-wallet";
+import { useOpenWalletModal } from "@0xsequence/wallet-widget";
 import { Overlay } from "./Overlay";
 import { TextStroke } from "./TextStroke";
 import { useEffect, useState } from "react";
