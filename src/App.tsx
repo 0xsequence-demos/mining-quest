@@ -1,9 +1,7 @@
-import "@0xsequence/kit/styles.css";
-
 import { ThemeProvider } from "@0xsequence/design-system";
-import { SequenceKit } from "@0xsequence/kit";
 
-import { KitWalletProvider } from "@0xsequence/kit-wallet";
+import { SequenceConnect } from "@0xsequence/connect";
+import { SequenceWalletProvider } from "@0xsequence/wallet-widget";
 
 import { Homepage } from "./components/Homepage";
 import { config } from "./config";
@@ -11,11 +9,11 @@ import { config } from "./config";
 export const App = () => {
   return (
     <ThemeProvider theme="dark">
-      <SequenceKit config={config}>
-        <KitWalletProvider>
+      <SequenceConnect config={config}>
+        <SequenceWalletProvider>
           <Homepage />
-        </KitWalletProvider>
-      </SequenceKit>
+        </SequenceWalletProvider>
+      </SequenceConnect>
     </ThemeProvider>
   );
 };
