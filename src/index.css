@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "@0xsequence/design-system/preset";
 
 @theme {
   --font-sans: Fredoka, system-ui, Avenir, Helvetica, Arial, sans-serif;

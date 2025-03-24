@@ -241,7 +241,7 @@ export const Homepage: FC = () => {
 function LoginScreen({
   setOpenConnectModal,
 }: {
-  setOpenConnectModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenConnectModal: (isOpen: boolean) => void;
 }) {
   return (
     <>
