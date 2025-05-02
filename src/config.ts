@@ -42,6 +42,7 @@ export const config = createConfig("waas", {
   email: false,
   signIn: {
     descriptiveSocials: true,
+    disableTooltipForDescriptiveSocials: true,
   },
   ecosystem: {
     walletUrl: walletAppUrl,
