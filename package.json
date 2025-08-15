@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "@0xsequence/design-system": "^2.0.11",
-    "@0xsequence/connect": "5.2.2",
-    "@0xsequence/wallet-widget": "5.2.2",
+    "@0xsequence/connect": "0.0.0-20250815122551",
+    "@0xsequence/wallet-widget": "0.0.0-20250815122551",
     "@0xsequence/network": ">= 2.3.7",
-    "@0xsequence/waas": ">= 2.3.7",
+    "@0xsequence/wallet-core": "github:0xsequence/sequence.js#dists/wallet/core",
     "@headlessui/react": "^2.2.0",
     "@react-spring/three": "^9.7.5",
     "@react-three/drei": "^9.121.5",
