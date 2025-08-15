@@ -164,7 +164,7 @@ export const Homepage: FC = () => {
           padding: "24px",
         }}
       >
-        <Spinner size="large" />
+        <Spinner size="lg" />
       </div>
     );
   }
