@@ -25,6 +25,7 @@ export const connectConfig: ConnectConfig = {
       chainId: demoNftContractChainId,
     },
   ],
+  readOnlyNetworks: [demoNftContractChainId],
 };
 
 const nftPermissions = Utils.PermissionBuilder.for(demoNftContractAddress)
@@ -46,13 +47,50 @@ const nftPermissions = Utils.PermissionBuilder.for(demoNftContractAddress)
     stateMutability: "nonpayable",
     type: "function",
   })
+
+  .build();
+
+const nftPermissions2 = Utils.PermissionBuilder.for(demoNftContractAddress)
+  .forFunction({
+    inputs: [
+      {
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        internalType: "uint256[]",
+        name: "ids",
+        type: "uint256[]",
+      },
+      {
+        internalType: "uint256[]",
+        name: "values",
+        type: "uint256[]",
+      },
+      {
+        internalType: "bytes",
+        name: "data",
+        type: "bytes",
+      },
+    ],
+    name: "safeBatchTransferFrom",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  })
   .build();
 
 export const permissions: Signers.Session.ExplicitParams = {
   chainId: BigInt(demoNftContractChainId),
   valueLimit: 0n,
   deadline: BigInt(Date.now() + 1000 * 60 * 500000),
-  permissions: [nftPermissions],
+  permissions: [nftPermissions, nftPermissions2],
 };
 
 export const config = createConfig({
