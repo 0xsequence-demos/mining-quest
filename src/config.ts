@@ -86,7 +86,7 @@ const nftPermissions2 = Utils.PermissionBuilder.for(demoNftContractAddress)
   })
   .build();
 
-export const permissions: Signers.Session.ExplicitParams = {
+export const explicitSession: Signers.Session.ExplicitParams = {
   chainId: demoNftContractChainId,
   valueLimit: 0n,
   deadline: BigInt(Date.now() + 1000 * 60 * 500000),
@@ -110,5 +110,5 @@ export const config = createConfig({
     projectId: walletConnectProjectId,
   },
   google: true,
-  permissions: permissions,
+  explicitSession: explicitSession,
 });
