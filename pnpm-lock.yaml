@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@0xsequence/connect':
-        specifier: 0.0.0-20250903155845
-        version: 0.0.0-20250903155845(@emotion/is-prop-valid@0.8.8)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.2)(utf-8-validate@5.0.10)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))(wagmi@2.16.8(@tanstack/query-core@5.85.5)(@tanstack/react-query@5.85.5(react@18.3.1))(@types/react@18.3.24)(bufferutil@4.0.9)(react@18.3.1)(typescript@5.9.2)(utf-8-validate@5.0.10)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))(zod@3.22.4))(zod@3.22.4)
+        specifier: 0.0.0-20250912152516
+        version: 0.0.0-20250912152516(@emotion/is-prop-valid@0.8.8)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.2)(utf-8-validate@5.0.10)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))(wagmi@2.16.8(@tanstack/query-core@5.85.5)(@tanstack/react-query@5.85.5(react@18.3.1))(@types/react@18.3.24)(bufferutil@4.0.9)(react@18.3.1)(typescript@5.9.2)(utf-8-validate@5.0.10)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))(zod@3.22.4))(zod@3.22.4)
       '@0xsequence/design-system':
         specifier: ^2.0.11
         version: 2.2.1(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(motion@12.23.12(@emotion/is-prop-valid@0.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -21,8 +21,8 @@ importers:
         specifier: github:0xsequence/sequence.js#dists/wallet/core
         version: https://codeload.github.com/0xsequence/sequence.js/tar.gz/fb5754f5f5a8af1d6bf9291e72c30c25da0021a4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4)
       '@0xsequence/wallet-widget':
-        specifier: 0.0.0-20250903155845
-        version: 0.0.0-20250903155845(m6jftctobgqopmtf62zjigmtaq)
+        specifier: 0.0.0-20250912152516
+        version: 0.0.0-20250912152516(ifbtksz72tgw6xvuikv2rr5ipi)
       '@headlessui/react':
         specifier: ^2.2.0
         version: 2.2.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -168,8 +168,8 @@ packages:
       viem: ^2.33.3
       wagmi: '>= 2.15.0'
 
-  '@0xsequence/connect@0.0.0-20250903155845':
-    resolution: {integrity: sha512-7NcyiXvxmt62Lud6RiWKc01PNDKV+Xn+uQ81VpkZeJ7Mb7oa69/+w8aWLksx+cCddOPC1+u6Tc7evRIbfgskcQ==}
+  '@0xsequence/connect@0.0.0-20250912152516':
+    resolution: {integrity: sha512-XZLAuZKd0sXRWQr36rdAlMEzmIiqEgb9wwyd5lw8f5Fpz5OXusVg16bFfA7tj4VyTRQF+LmiEqvfiCmFilrXzA==}
     peerDependencies:
       ethers: '>=6.13.0'
       react: '>= 17'
@@ -182,8 +182,8 @@ packages:
     peerDependencies:
       ethers: '>=6'
 
-  '@0xsequence/dapp-client@https://codeload.github.com/0xsequence/sequence.js/tar.gz/f3091270143ad817dcba0dc2df89f0d242f30ff3':
-    resolution: {tarball: https://codeload.github.com/0xsequence/sequence.js/tar.gz/f3091270143ad817dcba0dc2df89f0d242f30ff3}
+  '@0xsequence/dapp-client@https://codeload.github.com/0xsequence/sequence.js/tar.gz/177f942132283241995b20748dc35bdddbc5e370':
+    resolution: {tarball: https://codeload.github.com/0xsequence/sequence.js/tar.gz/177f942132283241995b20748dc35bdddbc5e370}
     version: 0.0.0
 
   '@0xsequence/design-system@2.1.11':
@@ -210,12 +210,12 @@ packages:
     peerDependencies:
       ethers: '>=6'
 
-  '@0xsequence/guard@https://codeload.github.com/0xsequence/sequence.js/tar.gz/3791e2c8241d71b599d28870cd2ed66e9f83b353':
-    resolution: {tarball: https://codeload.github.com/0xsequence/sequence.js/tar.gz/3791e2c8241d71b599d28870cd2ed66e9f83b353}
+  '@0xsequence/guard@https://codeload.github.com/0xsequence/sequence.js/tar.gz/a228c0e41992f16eacb9b53417435e708ab26e74':
+    resolution: {tarball: https://codeload.github.com/0xsequence/sequence.js/tar.gz/a228c0e41992f16eacb9b53417435e708ab26e74}
     version: 3.0.0
 
-  '@0xsequence/hooks@0.0.0-20250903155845':
-    resolution: {integrity: sha512-oJf1nqOJ/7D5pf25wWfr+i1bbDQc8Z4yhkY8/5TstehMoVQVlIgiK576xtLg6i4A0f/3LmSps5/vGhAKXsIjhA==}
+  '@0xsequence/hooks@0.0.0-20250912152516':
+    resolution: {integrity: sha512-x4qCDKXeL02WBx/WyjOAuuB0PASF8fXaL/vKpIC7vvzXdR1+i9tLi7v3Nvuyh6JyWMr67YoA361mlBsWaSsE3Q==}
     peerDependencies:
       '@0xsequence/api': '>=2.3.23'
       '@0xsequence/indexer': '>=2.3.23'
@@ -255,8 +255,8 @@ packages:
     peerDependencies:
       ethers: '>=6'
 
-  '@0xsequence/relayer@https://codeload.github.com/0xsequence/sequence.js/tar.gz/56c30b6036993d41b91e58f3daf4e9a059980482':
-    resolution: {tarball: https://codeload.github.com/0xsequence/sequence.js/tar.gz/56c30b6036993d41b91e58f3daf4e9a059980482}
+  '@0xsequence/relayer@https://codeload.github.com/0xsequence/sequence.js/tar.gz/d2a91b6ac04919a092ef543d2555e497ec2b3ba2':
+    resolution: {tarball: https://codeload.github.com/0xsequence/sequence.js/tar.gz/d2a91b6ac04919a092ef543d2555e497ec2b3ba2}
     version: 3.0.0
 
   '@0xsequence/replacer@2.3.25':
@@ -284,21 +284,25 @@ packages:
     peerDependencies:
       ethers: '>=6'
 
+  '@0xsequence/wallet-core@https://codeload.github.com/0xsequence/sequence.js/tar.gz/75ce1b9a138043919964a7fb68a082bba9541f7b':
+    resolution: {tarball: https://codeload.github.com/0xsequence/sequence.js/tar.gz/75ce1b9a138043919964a7fb68a082bba9541f7b}
+    version: 0.0.0
+
   '@0xsequence/wallet-core@https://codeload.github.com/0xsequence/sequence.js/tar.gz/fb5754f5f5a8af1d6bf9291e72c30c25da0021a4':
     resolution: {tarball: https://codeload.github.com/0xsequence/sequence.js/tar.gz/fb5754f5f5a8af1d6bf9291e72c30c25da0021a4}
     version: 0.0.0
 
-  '@0xsequence/wallet-primitives@https://codeload.github.com/0xsequence/sequence.js/tar.gz/22ebf98f702c541acff9ffb095b1cb758a851146':
-    resolution: {tarball: https://codeload.github.com/0xsequence/sequence.js/tar.gz/22ebf98f702c541acff9ffb095b1cb758a851146}
+  '@0xsequence/wallet-primitives@https://codeload.github.com/0xsequence/sequence.js/tar.gz/2b0cf42b2af44aebf81943bce2a04ca5c79d01fc':
+    resolution: {tarball: https://codeload.github.com/0xsequence/sequence.js/tar.gz/2b0cf42b2af44aebf81943bce2a04ca5c79d01fc}
     version: 0.0.0
 
-  '@0xsequence/wallet-widget@0.0.0-20250903155845':
-    resolution: {integrity: sha512-WmluP2umKlbeAG+p/isuN1ZQ95z85AvI5hC3tbml3bBIYWFZcKTecgPxrwueSMjQGHUpcLX4UCfU+JZ2jYxWKw==}
+  '@0xsequence/wallet-widget@0.0.0-20250912152516':
+    resolution: {integrity: sha512-H4w7e9YKzeafp1rlFPvCwdR5/6w5hUdxOR7tejfPjfkVvpMid62U6lWUASRnVtVv3uEYoKF1GBPaxe3VsnzCMQ==}
     peerDependencies:
       '@0xsequence/api': '>=2.3.23'
-      '@0xsequence/checkout': 0.0.0-20250903155845
-      '@0xsequence/connect': 0.0.0-20250903155845
-      '@0xsequence/hooks': 0.0.0-20250903155845
+      '@0xsequence/checkout': 0.0.0-20250912152516
+      '@0xsequence/connect': 0.0.0-20250912152516
+      '@0xsequence/hooks': 0.0.0-20250912152516
       '@0xsequence/indexer': '>=2.3.23'
       '@0xsequence/metadata': '>=2.3.23'
       '@0xsequence/network': '>=2.3.23'
@@ -5120,13 +5124,13 @@ snapshots:
       '@0xsequence/wallet': 2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       ethers: 6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
 
-  '@0xsequence/checkout@0.0.0-20250821094217(iyrkic4jhspd6fllgwy4mhuspu)':
+  '@0xsequence/checkout@0.0.0-20250821094217(ugopjf34upph7znugeghfsuecm)':
     dependencies:
       0xsequence: 2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       '@0xsequence/api': 2.3.25
-      '@0xsequence/connect': 0.0.0-20250903155845(@emotion/is-prop-valid@0.8.8)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.2)(utf-8-validate@5.0.10)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))(wagmi@2.16.8(@tanstack/query-core@5.85.5)(@tanstack/react-query@5.85.5(react@18.3.1))(@types/react@18.3.24)(bufferutil@4.0.9)(react@18.3.1)(typescript@5.9.2)(utf-8-validate@5.0.10)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))(zod@3.22.4))(zod@3.22.4)
+      '@0xsequence/connect': 0.0.0-20250912152516(@emotion/is-prop-valid@0.8.8)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.2)(utf-8-validate@5.0.10)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))(wagmi@2.16.8(@tanstack/query-core@5.85.5)(@tanstack/react-query@5.85.5(react@18.3.1))(@types/react@18.3.24)(bufferutil@4.0.9)(react@18.3.1)(typescript@5.9.2)(utf-8-validate@5.0.10)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))(zod@3.22.4))(zod@3.22.4)
       '@0xsequence/design-system': 2.1.11(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(motion@12.23.12(@emotion/is-prop-valid@0.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@0xsequence/hooks': 0.0.0-20250903155845(@0xsequence/api@2.3.25)(@0xsequence/indexer@2.3.25)(@0xsequence/metadata@2.3.25)(@0xsequence/network@2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(@tanstack/react-query@5.85.5(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))
+      '@0xsequence/hooks': 0.0.0-20250912152516(@0xsequence/api@2.3.25)(@0xsequence/indexer@2.3.25)(@0xsequence/metadata@2.3.25)(@0xsequence/network@2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(@tanstack/react-query@5.85.5(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))
       '@0xsequence/indexer': 2.3.25
       '@0xsequence/marketplace': 2.3.25
       '@0xsequence/metadata': 2.3.25
@@ -5148,16 +5152,16 @@ snapshots:
       - '@types/react'
       - '@types/react-dom'
 
-  '@0xsequence/connect@0.0.0-20250903155845(@emotion/is-prop-valid@0.8.8)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.2)(utf-8-validate@5.0.10)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))(wagmi@2.16.8(@tanstack/query-core@5.85.5)(@tanstack/react-query@5.85.5(react@18.3.1))(@types/react@18.3.24)(bufferutil@4.0.9)(react@18.3.1)(typescript@5.9.2)(utf-8-validate@5.0.10)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))(zod@3.22.4))(zod@3.22.4)':
+  '@0xsequence/connect@0.0.0-20250912152516(@emotion/is-prop-valid@0.8.8)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.2)(utf-8-validate@5.0.10)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))(wagmi@2.16.8(@tanstack/query-core@5.85.5)(@tanstack/react-query@5.85.5(react@18.3.1))(@types/react@18.3.24)(bufferutil@4.0.9)(react@18.3.1)(typescript@5.9.2)(utf-8-validate@5.0.10)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))(zod@3.22.4))(zod@3.22.4)':
     dependencies:
       0xsequence: 2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       '@0xsequence/api': 2.3.25
       '@0xsequence/auth': 2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       '@0xsequence/core': 2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
-      '@0xsequence/dapp-client': https://codeload.github.com/0xsequence/sequence.js/tar.gz/f3091270143ad817dcba0dc2df89f0d242f30ff3(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@0xsequence/dapp-client': https://codeload.github.com/0xsequence/sequence.js/tar.gz/177f942132283241995b20748dc35bdddbc5e370(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4)
       '@0xsequence/design-system': 2.1.11(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(motion@12.23.12(@emotion/is-prop-valid@0.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@0xsequence/ethauth': 1.0.0(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
-      '@0xsequence/hooks': 0.0.0-20250903155845(@0xsequence/api@2.3.25)(@0xsequence/indexer@2.3.25)(@0xsequence/metadata@2.3.25)(@0xsequence/network@2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(@tanstack/react-query@5.85.5(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))
+      '@0xsequence/hooks': 0.0.0-20250912152516(@0xsequence/api@2.3.25)(@0xsequence/indexer@2.3.25)(@0xsequence/metadata@2.3.25)(@0xsequence/network@2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(@tanstack/react-query@5.85.5(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))
       '@0xsequence/indexer': 2.3.25
       '@0xsequence/metadata': 2.3.25
       '@0xsequence/network': 2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
@@ -5195,11 +5199,11 @@ snapshots:
       '@0xsequence/utils': 2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       ethers: 6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
 
-  '@0xsequence/dapp-client@https://codeload.github.com/0xsequence/sequence.js/tar.gz/f3091270143ad817dcba0dc2df89f0d242f30ff3(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4)':
+  '@0xsequence/dapp-client@https://codeload.github.com/0xsequence/sequence.js/tar.gz/177f942132283241995b20748dc35bdddbc5e370(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4)':
     dependencies:
-      '@0xsequence/guard': https://codeload.github.com/0xsequence/sequence.js/tar.gz/3791e2c8241d71b599d28870cd2ed66e9f83b353(typescript@5.9.2)(zod@3.22.4)
-      '@0xsequence/wallet-core': https://codeload.github.com/0xsequence/sequence.js/tar.gz/fb5754f5f5a8af1d6bf9291e72c30c25da0021a4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4)
-      '@0xsequence/wallet-primitives': https://codeload.github.com/0xsequence/sequence.js/tar.gz/22ebf98f702c541acff9ffb095b1cb758a851146(typescript@5.9.2)(zod@3.22.4)
+      '@0xsequence/guard': https://codeload.github.com/0xsequence/sequence.js/tar.gz/a228c0e41992f16eacb9b53417435e708ab26e74(typescript@5.9.2)(zod@3.22.4)
+      '@0xsequence/wallet-core': https://codeload.github.com/0xsequence/sequence.js/tar.gz/75ce1b9a138043919964a7fb68a082bba9541f7b(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@0xsequence/wallet-primitives': https://codeload.github.com/0xsequence/sequence.js/tar.gz/2b0cf42b2af44aebf81943bce2a04ca5c79d01fc(typescript@5.9.2)(zod@3.22.4)
       ox: 0.7.2(typescript@5.9.2)(zod@3.22.4)
     transitivePeerDependencies:
       - bufferutil
@@ -5274,14 +5278,14 @@ snapshots:
       '@0xsequence/utils': 2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       ethers: 6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
 
-  '@0xsequence/guard@https://codeload.github.com/0xsequence/sequence.js/tar.gz/3791e2c8241d71b599d28870cd2ed66e9f83b353(typescript@5.9.2)(zod@3.22.4)':
+  '@0xsequence/guard@https://codeload.github.com/0xsequence/sequence.js/tar.gz/a228c0e41992f16eacb9b53417435e708ab26e74(typescript@5.9.2)(zod@3.22.4)':
     dependencies:
       ox: 0.7.2(typescript@5.9.2)(zod@3.22.4)
     transitivePeerDependencies:
       - typescript
       - zod
 
-  '@0xsequence/hooks@0.0.0-20250903155845(@0xsequence/api@2.3.25)(@0xsequence/indexer@2.3.25)(@0xsequence/metadata@2.3.25)(@0xsequence/network@2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(@tanstack/react-query@5.85.5(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))':
+  '@0xsequence/hooks@0.0.0-20250912152516(@0xsequence/api@2.3.25)(@0xsequence/indexer@2.3.25)(@0xsequence/metadata@2.3.25)(@0xsequence/network@2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(@tanstack/react-query@5.85.5(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))':
     dependencies:
       '@0xsequence/api': 2.3.25
       '@0xsequence/indexer': 2.3.25
@@ -5336,7 +5340,7 @@ snapshots:
       '@0xsequence/utils': 2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       ethers: 6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
 
-  '@0xsequence/relayer@https://codeload.github.com/0xsequence/sequence.js/tar.gz/56c30b6036993d41b91e58f3daf4e9a059980482': {}
+  '@0xsequence/relayer@https://codeload.github.com/0xsequence/sequence.js/tar.gz/d2a91b6ac04919a092ef543d2555e497ec2b3ba2': {}
 
   '@0xsequence/replacer@2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))':
     dependencies:
@@ -5376,11 +5380,11 @@ snapshots:
     transitivePeerDependencies:
       - aws-crt
 
-  '@0xsequence/wallet-core@https://codeload.github.com/0xsequence/sequence.js/tar.gz/fb5754f5f5a8af1d6bf9291e72c30c25da0021a4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4)':
+  '@0xsequence/wallet-core@https://codeload.github.com/0xsequence/sequence.js/tar.gz/75ce1b9a138043919964a7fb68a082bba9541f7b(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4)':
     dependencies:
-      '@0xsequence/guard': https://codeload.github.com/0xsequence/sequence.js/tar.gz/3791e2c8241d71b599d28870cd2ed66e9f83b353(typescript@5.9.2)(zod@3.22.4)
-      '@0xsequence/relayer': https://codeload.github.com/0xsequence/sequence.js/tar.gz/56c30b6036993d41b91e58f3daf4e9a059980482
-      '@0xsequence/wallet-primitives': https://codeload.github.com/0xsequence/sequence.js/tar.gz/22ebf98f702c541acff9ffb095b1cb758a851146(typescript@5.9.2)(zod@3.22.4)
+      '@0xsequence/guard': https://codeload.github.com/0xsequence/sequence.js/tar.gz/a228c0e41992f16eacb9b53417435e708ab26e74(typescript@5.9.2)(zod@3.22.4)
+      '@0xsequence/relayer': https://codeload.github.com/0xsequence/sequence.js/tar.gz/d2a91b6ac04919a092ef543d2555e497ec2b3ba2
+      '@0xsequence/wallet-primitives': https://codeload.github.com/0xsequence/sequence.js/tar.gz/2b0cf42b2af44aebf81943bce2a04ca5c79d01fc(typescript@5.9.2)(zod@3.22.4)
       mipd: 0.0.7(typescript@5.9.2)
       ox: 0.7.2(typescript@5.9.2)(zod@3.22.4)
       viem: 2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4)
@@ -5390,20 +5394,34 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@0xsequence/wallet-primitives@https://codeload.github.com/0xsequence/sequence.js/tar.gz/22ebf98f702c541acff9ffb095b1cb758a851146(typescript@5.9.2)(zod@3.22.4)':
+  '@0xsequence/wallet-core@https://codeload.github.com/0xsequence/sequence.js/tar.gz/fb5754f5f5a8af1d6bf9291e72c30c25da0021a4(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4)':
+    dependencies:
+      '@0xsequence/guard': https://codeload.github.com/0xsequence/sequence.js/tar.gz/a228c0e41992f16eacb9b53417435e708ab26e74(typescript@5.9.2)(zod@3.22.4)
+      '@0xsequence/relayer': https://codeload.github.com/0xsequence/sequence.js/tar.gz/d2a91b6ac04919a092ef543d2555e497ec2b3ba2
+      '@0xsequence/wallet-primitives': https://codeload.github.com/0xsequence/sequence.js/tar.gz/2b0cf42b2af44aebf81943bce2a04ca5c79d01fc(typescript@5.9.2)(zod@3.22.4)
+      mipd: 0.0.7(typescript@5.9.2)
+      ox: 0.7.2(typescript@5.9.2)(zod@3.22.4)
+      viem: 2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+
+  '@0xsequence/wallet-primitives@https://codeload.github.com/0xsequence/sequence.js/tar.gz/2b0cf42b2af44aebf81943bce2a04ca5c79d01fc(typescript@5.9.2)(zod@3.22.4)':
     dependencies:
       ox: 0.7.2(typescript@5.9.2)(zod@3.22.4)
     transitivePeerDependencies:
       - typescript
       - zod
 
-  '@0xsequence/wallet-widget@0.0.0-20250903155845(m6jftctobgqopmtf62zjigmtaq)':
+  '@0xsequence/wallet-widget@0.0.0-20250912152516(ifbtksz72tgw6xvuikv2rr5ipi)':
     dependencies:
       '@0xsequence/api': 2.3.25
-      '@0xsequence/checkout': 0.0.0-20250821094217(iyrkic4jhspd6fllgwy4mhuspu)
-      '@0xsequence/connect': 0.0.0-20250903155845(@emotion/is-prop-valid@0.8.8)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.2)(utf-8-validate@5.0.10)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))(wagmi@2.16.8(@tanstack/query-core@5.85.5)(@tanstack/react-query@5.85.5(react@18.3.1))(@types/react@18.3.24)(bufferutil@4.0.9)(react@18.3.1)(typescript@5.9.2)(utf-8-validate@5.0.10)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))(zod@3.22.4))(zod@3.22.4)
+      '@0xsequence/checkout': 0.0.0-20250821094217(ugopjf34upph7znugeghfsuecm)
+      '@0xsequence/connect': 0.0.0-20250912152516(@emotion/is-prop-valid@0.8.8)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.2)(utf-8-validate@5.0.10)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))(wagmi@2.16.8(@tanstack/query-core@5.85.5)(@tanstack/react-query@5.85.5(react@18.3.1))(@types/react@18.3.24)(bufferutil@4.0.9)(react@18.3.1)(typescript@5.9.2)(utf-8-validate@5.0.10)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))(zod@3.22.4))(zod@3.22.4)
       '@0xsequence/design-system': 2.1.11(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(motion@12.23.12(@emotion/is-prop-valid@0.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@0xsequence/hooks': 0.0.0-20250903155845(@0xsequence/api@2.3.25)(@0xsequence/indexer@2.3.25)(@0xsequence/metadata@2.3.25)(@0xsequence/network@2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(@tanstack/react-query@5.85.5(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))
+      '@0xsequence/hooks': 0.0.0-20250912152516(@0xsequence/api@2.3.25)(@0xsequence/indexer@2.3.25)(@0xsequence/metadata@2.3.25)(@0xsequence/network@2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(@tanstack/react-query@5.85.5(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))
       '@0xsequence/indexer': 2.3.25
       '@0xsequence/metadata': 2.3.25
       '@0xsequence/network': 2.3.25(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))

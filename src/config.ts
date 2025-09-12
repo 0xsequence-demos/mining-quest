@@ -110,10 +110,11 @@ export const config = createConfig({
   defaultChainId: demoNftContractChainId,
   email: false,
   apple: false,
-  signIn: {
-    descriptiveSocials: true,
-    disableTooltipForDescriptiveSocials: true,
-  },
+  passkey: true,
+  // signIn: {
+  //   descriptiveSocials: true,
+  //   disableTooltipForDescriptiveSocials: true,
+  // },
   walletConnect: {
     projectId: walletConnectProjectId,
   },
