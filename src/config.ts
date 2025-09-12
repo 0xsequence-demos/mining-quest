@@ -93,9 +93,17 @@ export const explicitSession: Signers.Session.ExplicitParams = {
   permissions: [nftPermissions, nftPermissions2],
 };
 
+// check if search param "walletUrl" is set
+// if set, use it as walletUrl
+// if not, use default walletUrl
+//
+const walletUrl =
+  new URLSearchParams(window.location.search).get("walletUrl") ||
+  "https://v3.sequence-dev.app";
+
 export const config = createConfig({
   ...connectConfig,
-  walletUrl: "https://v3.sequence-dev.app",
+  walletUrl,
   dappOrigin: window.location.origin,
   appName: GAME_NAME,
   chainIds: [demoNftContractChainId],
