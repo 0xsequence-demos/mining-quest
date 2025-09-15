@@ -89,7 +89,7 @@ const nftPermissions2 = Utils.PermissionBuilder.for(demoNftContractAddress)
 export const explicitSession: Signers.Session.ExplicitParams = {
   chainId: demoNftContractChainId,
   valueLimit: 0n,
-  deadline: BigInt(Date.now() + 1000 * 60 * 500000),
+  deadline: BigInt(Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30), // in seconds
   permissions: [nftPermissions, nftPermissions2],
 };
 
