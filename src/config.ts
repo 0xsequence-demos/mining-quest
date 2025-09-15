@@ -97,7 +97,7 @@ export const explicitSession: Signers.Session.ExplicitParams = {
 // if set, use it as walletUrl
 // if not, use default walletUrl
 //
-const walletUrl =
+export const walletUrl =
   new URLSearchParams(window.location.search).get("walletUrl") ||
   "https://v3.sequence-dev.app";
 

@@ -12,7 +12,11 @@ import {
 } from "wagmi";
 
 import { NFT_ABI } from "../abi";
-import { demoNftContractAddress, demoNftContractChainId } from "../config";
+import {
+  demoNftContractAddress,
+  demoNftContractChainId,
+  walletUrl,
+} from "../config";
 import View3D from "./3d/View3D";
 import MiningGame from "./3d/MiningGame";
 import ItemViewer3D from "./3d/ItemViewer3D";
@@ -27,6 +31,32 @@ export const Homepage: FC = () => {
   const { setOpenConnectModal } = useOpenConnectModal();
 
   const { wallets, disconnectWallet } = useWallets();
+
+  const [shouldDisconnect, setShouldDisconnect] = useState(false);
+
+  // Step 1: On mount, check if a disconnect is needed due to walletUrl change.
+  useEffect(() => {
+    const lastWalletUrl = localStorage.getItem("walletUrl");
+    if (lastWalletUrl && lastWalletUrl !== walletUrl) {
+      setShouldDisconnect(true);
+    } else {
+      // If URLs match or it's the first visit, just store the current URL.
+      localStorage.setItem("walletUrl", walletUrl);
+    }
+  }, [walletUrl]); // Only depends on walletUrl, runs once on load.
+
+  // Step 2: If a disconnect is flagged and wallets are loaded, perform it.
+  useEffect(() => {
+    if (shouldDisconnect && wallets.length > 0) {
+      wallets.forEach((wallet) => {
+        disconnectWallet(wallet.address);
+      });
+      // After disconnecting, update the stored URL and reset the flag.
+      localStorage.setItem("walletUrl", walletUrl);
+      setShouldDisconnect(false);
+      window.location.reload();
+    }
+  }, [shouldDisconnect, wallets, disconnectWallet, walletUrl]);
 
   const { address } = useAccount();
   const { data: walletClient } = useWalletClient();
