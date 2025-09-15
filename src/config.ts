@@ -50,47 +50,49 @@ const nftPermissions = Utils.PermissionBuilder.for(demoNftContractAddress)
 
   .build();
 
-const nftPermissions2 = Utils.PermissionBuilder.for(demoNftContractAddress)
-  .forFunction({
-    inputs: [
-      {
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        internalType: "uint256[]",
-        name: "ids",
-        type: "uint256[]",
-      },
-      {
-        internalType: "uint256[]",
-        name: "values",
-        type: "uint256[]",
-      },
-      {
-        internalType: "bytes",
-        name: "data",
-        type: "bytes",
-      },
-    ],
-    name: "safeBatchTransferFrom",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  })
-  .build();
+// can be enabled to allow transfers as well, but sequence connector can also open wallet for txns that do not have permissions
+
+// const nftPermissions2 = Utils.PermissionBuilder.for(demoNftContractAddress)
+//   .forFunction({
+//     inputs: [
+//       {
+//         internalType: "address",
+//         name: "from",
+//         type: "address",
+//       },
+//       {
+//         internalType: "address",
+//         name: "to",
+//         type: "address",
+//       },
+//       {
+//         internalType: "uint256[]",
+//         name: "ids",
+//         type: "uint256[]",
+//       },
+//       {
+//         internalType: "uint256[]",
+//         name: "values",
+//         type: "uint256[]",
+//       },
+//       {
+//         internalType: "bytes",
+//         name: "data",
+//         type: "bytes",
+//       },
+//     ],
+//     name: "safeBatchTransferFrom",
+//     outputs: [],
+//     stateMutability: "nonpayable",
+//     type: "function",
+//   })
+//   .build();
 
 export const explicitSession: Signers.Session.ExplicitParams = {
   chainId: demoNftContractChainId,
   valueLimit: 0n,
   deadline: BigInt(Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30), // in seconds
-  permissions: [nftPermissions, nftPermissions2],
+  permissions: [nftPermissions],
 };
 
 // check if search param "walletUrl" is set
