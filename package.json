@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@0xsequence/design-system": "^2.0.11",
-    "@0xsequence/connect": "0.0.0-20250912152516",
-    "@0xsequence/wallet-widget": "0.0.0-20250912152516",
+    "@0xsequence/connect": "0.0.0-20250924112110",
+    "@0xsequence/wallet-widget": "0.0.0-20250924112110",
     "@0xsequence/network": ">= 2.3.7",
     "@0xsequence/wallet-core": "github:0xsequence/sequence.js#dists/wallet/core",
     "@headlessui/react": "^2.2.0",

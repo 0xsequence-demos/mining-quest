@@ -1,12 +1,16 @@
-import { ConnectConfig, createConfig } from "@0xsequence/connect";
-import { Signers, Utils } from "@0xsequence/wallet-core";
+import {
+  ConnectConfig,
+  createConfig,
+  ExplicitSessionParams,
+} from "@0xsequence/connect";
+import { Utils } from "@0xsequence/wallet-core";
 
 const GAME_NAME = "Mining Quest";
 
 export const demoNftContractAddress = import.meta.env
   .VITE_DEMO_NFT_CONTRACT_ADDRESS;
 export const demoNftContractChainId = parseInt(
-  import.meta.env.VITE_DEMO_NFT_CONTRACT_CHAIN_ID
+  import.meta.env.VITE_DEMO_NFT_CONTRACT_CHAIN_ID,
 );
 
 const projectAccessKey = import.meta.env.VITE_PROJECT_ACCESS_KEY;
@@ -88,10 +92,12 @@ const nftPermissions = Utils.PermissionBuilder.for(demoNftContractAddress)
 //   })
 //   .build();
 
-export const explicitSession: Signers.Session.ExplicitParams = {
+export const explicitSession: ExplicitSessionParams = {
   chainId: demoNftContractChainId,
-  valueLimit: 0n,
-  deadline: BigInt(Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30), // in seconds
+  nativeTokenSpending: {
+    valueLimit: 0n,
+  },
+  expiresIn: { days: 30 },
   permissions: [nftPermissions],
 };
 
@@ -110,8 +116,8 @@ export const config = createConfig({
   appName: GAME_NAME,
   chainIds: [demoNftContractChainId],
   defaultChainId: demoNftContractChainId,
-  email: false,
-  apple: false,
+  email: true,
+  apple: true,
   passkey: true,
   // signIn: {
   //   descriptiveSocials: true,
@@ -121,5 +127,5 @@ export const config = createConfig({
     projectId: walletConnectProjectId,
   },
   google: true,
-  explicitSession: explicitSession,
+  explicitSessionParams: explicitSession,
 });
