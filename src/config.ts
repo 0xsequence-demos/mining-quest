@@ -10,7 +10,7 @@ const GAME_NAME = "Mining Quest";
 export const demoNftContractAddress = import.meta.env
   .VITE_DEMO_NFT_CONTRACT_ADDRESS;
 export const demoNftContractChainId = parseInt(
-  import.meta.env.VITE_DEMO_NFT_CONTRACT_CHAIN_ID,
+  import.meta.env.VITE_DEMO_NFT_CONTRACT_CHAIN_ID
 );
 
 const projectAccessKey = import.meta.env.VITE_PROJECT_ACCESS_KEY;
@@ -21,6 +21,8 @@ export const connectConfig: ConnectConfig = {
   defaultTheme: "dark",
   signIn: {
     projectName: GAME_NAME,
+    descriptiveSocials: true,
+    disableTooltipForDescriptiveSocials: true,
   },
   displayedAssets: [
     // Demo nft
