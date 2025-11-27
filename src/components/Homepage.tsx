@@ -140,14 +140,6 @@ export const Homepage: FC = () => {
 
   const [tempGemsMoon, setTempGemsMoon] = useState(0);
   const [tempGemsSun, setTempGemsSun] = useState(0);
-  const [pendingMint, setPendingMint] = useState<{
-    ids: bigint[];
-    amts: bigint[];
-    requestId: number;
-  } | null>(null);
-  const pendingRequestIdRef = useRef<number | null>(null);
-  const processedRequestIdsRef = useRef<Set<number>>(new Set());
-  const mintRequestCounterRef = useRef(0);
   const isMintingRef = useRef(false);
   const waitForChainSync = useCallback(
     async (targetId: number) => {
@@ -198,144 +190,84 @@ export const Homepage: FC = () => {
       return;
     }
 
-    if (isMintingRef.current || pendingMint) {
+    if (isMintingRef.current) {
       console.warn("Mint already in progress, skipping duplicate request.", {
         isMinting: isMintingRef.current,
-        pendingMint,
       });
       return;
     }
 
-    const requestId = ++mintRequestCounterRef.current;
-    console.log("mint: request received", {
-      requestId,
-      itemIds: itemIds.map((i) => i.toString()),
-      itemAmts: itemAmts.map((a) => a.toString()),
-      chainId,
-    });
+    isMintingRef.current = true;
     setMintStatus("pending");
-    setPendingMint({ ids: itemIds, amts: itemAmts, requestId });
+    const args = [itemIds, itemAmts] as const;
+    console.log("mint: starting", {
+      args: {
+        ids: args[0].map((i) => i.toString()),
+        amts: args[1].map((a) => a.toString()),
+      },
+      currentChain: chainIdRef.current,
+      targetChain: targetChain.id,
+    });
+
+    try {
+      if (!switchChainAsync) {
+        throw new Error(
+          "switchChainAsync is not available; please switch networks in your wallet."
+        );
+      }
+
+      const switched = await switchChainAsync({ chainId: targetChain.id });
+      if (switched && switched.id !== targetChain.id) {
+        throw new Error(
+          `Switch chain completed but ended on the wrong chain: ${switched.id}`
+        );
+      }
+
+      const waitResult = await waitForChainSync(targetChain.id);
+      console.log("mint: chain check", {
+        wagmiChain: chainIdRef.current,
+        walletChain: waitResult.walletChain,
+        targetChain: targetChain.id,
+        ok: waitResult.ok,
+      });
+      if (!waitResult.ok) {
+        throw new Error(
+          `Wallet still on chain ${waitResult.walletChain} after switch, expected ${targetChain.id}`
+        );
+      }
+
+      const txHash = await writeContractAsync({
+        address: demoNftContractAddress,
+        abi: NFT_ABI,
+        functionName: "batchMint",
+        args,
+        chainId: targetChain.id,
+        chain: targetChain,
+        account: address,
+      });
+      console.log("mint: tx sent", { txHash });
+
+      setTimeout(async () => {
+        await refetchNftBalances();
+        setMintStatus("success");
+        console.log("mint: success");
+      }, 500);
+    } catch (error) {
+      console.error("Minting failed:", { error });
+      const err = error as { cause?: { shortMessage?: string } };
+      if (err.cause?.shortMessage === "Transaction creation failed.") {
+        disconnectWallet(address as string);
+        setMintStatus("notStarted");
+      } else {
+        setMintStatus("failed");
+      }
+    } finally {
+      isMintingRef.current = false;
+      console.log("mint: cleaned up");
+    }
   };
 
   const [mintStatus, setMintStatus] = useState<MintStatus>("notStarted");
-
-  // Once chain is correct and a mint is queued, perform the write.
-  useEffect(() => {
-    if (!pendingMint) return;
-    if (!targetChain) {
-      console.error("Target chain missing when trying to mint.");
-      setMintStatus("failed");
-      setPendingMint(null);
-      return;
-    }
-    if (processedRequestIdsRef.current.has(pendingMint.requestId)) {
-      return;
-    }
-    if (pendingRequestIdRef.current === pendingMint.requestId) {
-      // Already processing this request (guards against React StrictMode double-invoke).
-      return;
-    }
-    if (isMintingRef.current) return;
-    if (!address) {
-      console.error("No address when trying to mint after chain switch.");
-      setMintStatus("failed");
-      setPendingMint(null);
-      return;
-    }
-
-    const run = async () => {
-      isMintingRef.current = true;
-      pendingRequestIdRef.current = pendingMint.requestId;
-      processedRequestIdsRef.current.add(pendingMint.requestId);
-      const args = [pendingMint.ids, pendingMint.amts] as const;
-      console.log("mint: starting", {
-        requestId: pendingMint.requestId,
-        args: {
-          ids: args[0].map((i) => i.toString()),
-          amts: args[1].map((a) => a.toString()),
-        },
-        currentChain: chainIdRef.current,
-        targetChain: targetChain.id,
-      });
-      try {
-        setMintStatus("pending");
-        if (!switchChainAsync) {
-          throw new Error(
-            "switchChainAsync is not available; please switch networks in your wallet."
-          );
-        }
-
-        const switched = await switchChainAsync({ chainId: targetChain.id });
-        if (switched && switched.id !== targetChain.id) {
-          throw new Error(
-            `Switch chain completed but ended on the wrong chain: ${switched.id}`
-          );
-        }
-
-        const waitResult = await waitForChainSync(targetChain.id);
-        console.log("mint: chain check", {
-          requestId: pendingMint.requestId,
-          wagmiChain: chainIdRef.current,
-          walletChain: waitResult.walletChain,
-          targetChain: targetChain.id,
-          ok: waitResult.ok,
-        });
-        if (!waitResult.ok) {
-          throw new Error(
-            `Wallet still on chain ${waitResult.walletChain} after switch, expected ${targetChain.id}`
-          );
-        }
-
-        const txHash = await writeContractAsync({
-          address: demoNftContractAddress,
-          abi: NFT_ABI,
-          functionName: "batchMint",
-          args,
-          chainId: targetChain.id,
-          chain: targetChain,
-          account: address,
-        });
-        console.log("mint: tx sent", { requestId: pendingMint.requestId, txHash });
-
-        // Give the indexer a moment before checking balances again.
-        setTimeout(async () => {
-          await refetchNftBalances();
-          setMintStatus("success");
-          console.log("mint: success", { requestId: pendingMint.requestId });
-        }, 500);
-      } catch (error) {
-        console.error("Minting failed:", {
-          requestId: pendingMint.requestId,
-          error,
-        });
-        // Type assertion to access error properties safely
-        const err = error as { cause?: { shortMessage?: string } };
-        // this error means wallet is not connected
-        if (err.cause?.shortMessage === "Transaction creation failed.") {
-          disconnectWallet(address as string);
-          setMintStatus("notStarted");
-        } else {
-          setMintStatus("failed");
-        }
-      } finally {
-        isMintingRef.current = false;
-        pendingRequestIdRef.current = null;
-        setPendingMint(null);
-        console.log("mint: cleaned up", { requestId: pendingMint.requestId });
-      }
-    };
-
-    run();
-  }, [
-    pendingMint,
-    targetChain,
-    writeContractAsync,
-    refetchNftBalances,
-    address,
-    disconnectWallet,
-    switchChainAsync,
-    waitForChainSync,
-  ]);
 
   // Set demo mode based on pickaxe ownership
   useEffect(() => {
