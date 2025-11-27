@@ -107,9 +107,19 @@ export const explicitSession: ExplicitSessionParams = {
 // if set, use it as walletUrl
 // if not, use default walletUrl
 //
-export const walletUrl =
-  new URLSearchParams(window.location.search).get("walletUrl") ||
+const searchParams = new URLSearchParams(window.location.search);
+// Accept walletUrl in any case or separator style (walletUrl, walleturl, wallet_url, etc.)
+const walletUrlSearchKey = Array.from(searchParams.keys()).find(
+  (key) => key.replace(/[_-]/g, "").toLowerCase() === "walleturl"
+);
+
+const normalizeWalletUrl = (url: string) => url.replace(/\/+$/, "");
+
+const rawWalletUrl =
+  (walletUrlSearchKey && searchParams.get(walletUrlSearchKey)) ||
   "https://v3.sequence-dev.app";
+
+export const walletUrl = normalizeWalletUrl(rawWalletUrl);
 
 export const config = createConfig({
   ...connectConfig,

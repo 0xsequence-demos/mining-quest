@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@0xsequence/connect':
-        specifier: 0.0.0-20251127100747
-        version: 0.0.0-20251127100747(@emotion/is-prop-valid@0.8.8)(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))(wagmi@2.19.5(@tanstack/query-core@5.90.10)(@tanstack/react-query@5.90.10(react@18.3.1))(@types/react@18.3.27)(bufferutil@4.0.9)(fastestsmallesttextencoderdecoder@1.0.22)(react@18.3.1)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))(ws@7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@4.1.12))(zod@4.1.12)
+        specifier: 0.0.0-20251127150140
+        version: 0.0.0-20251127150140(@emotion/is-prop-valid@0.8.8)(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))(wagmi@2.19.5(@tanstack/query-core@5.90.10)(@tanstack/react-query@5.90.10(react@18.3.1))(@types/react@18.3.27)(bufferutil@4.0.9)(fastestsmallesttextencoderdecoder@1.0.22)(react@18.3.1)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))(ws@7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@4.1.12))(zod@4.1.12)
       '@0xsequence/design-system':
         specifier: ^2.0.11
         version: 2.2.5(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(motion@12.23.24(@emotion/is-prop-valid@0.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -21,8 +21,8 @@ importers:
         specifier: github:0xsequence/sequence.js#dists/wallet/core
         version: https://codeload.github.com/0xsequence/sequence.js/tar.gz/b90af291a93ddb0f38b9b1ffa54d41693f8396da(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12)
       '@0xsequence/wallet-widget':
-        specifier: 0.0.0-20251127100747
-        version: 0.0.0-20251127100747(qdgvndtui7hzjzfgetgjpgsrpi)
+        specifier: 0.0.0-20251127150140
+        version: 0.0.0-20251127150140(7tzdslnsapsachpwntfrg4eswa)
       '@headlessui/react':
         specifier: ^2.2.0
         version: 2.2.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -168,8 +168,8 @@ packages:
       viem: ^2.33.3
       wagmi: 2.15.0
 
-  '@0xsequence/connect@0.0.0-20251127100747':
-    resolution: {integrity: sha512-CLqCGbQcBjArWQV9l6vSmWN6iLO2aP0Sipb25mP4LgAqnXM5KtfnVOLebXUVWtzhpNVpqvjGzqWsr2X9sDu4Ow==}
+  '@0xsequence/connect@0.0.0-20251127150140':
+    resolution: {integrity: sha512-/t6leiFR47Zl6ClPLfznqrA+yC87k1OGoC6yqs0ArlgsMT5Itms4J1UFn+/EtKfITe8NVjWf+UT/v/lzVXnHyg==}
     peerDependencies:
       react: '>= 17'
       react-dom: '>= 17'
@@ -213,8 +213,8 @@ packages:
     resolution: {tarball: https://codeload.github.com/0xsequence/sequence.js/tar.gz/501693a7bd7332ad10fd0f4a72e0dd153b44af0a}
     version: 3.0.0-beta.1
 
-  '@0xsequence/hooks@0.0.0-20251127100747':
-    resolution: {integrity: sha512-vfZ2SggL5hvIR2e4OiO/Kp1OFHlQCc9vx0GlBoRr9/3M902u5/F1ycFtuFkulvpBeBkEHtrL3Axu3AanKYDtmg==}
+  '@0xsequence/hooks@0.0.0-20251127150140':
+    resolution: {integrity: sha512-lIHZbhtUyM65DtFBzD8i+OQR+mbI9y2j8jZyoxOz3zmPn1XlQHlw1YBe6dZg3O9nH+nryQOkWwFUY8gj2URakQ==}
     peerDependencies:
       '@0xsequence/api': '>=2.3.23'
       '@0xsequence/indexer': '>=2.3.23'
@@ -295,13 +295,13 @@ packages:
     resolution: {tarball: https://codeload.github.com/0xsequence/sequence.js/tar.gz/d2967108579e84603f3b5e05685c6f331c1f3db7}
     version: 3.0.0-beta.1
 
-  '@0xsequence/wallet-widget@0.0.0-20251127100747':
-    resolution: {integrity: sha512-wqjLDciOvr4pC0M4Wa9KXqYVdrxIFHUARJLjv8vka45O/S3npzpGRqvipLUmuy1ztYKBFxDyygbh/F3S8TbkCg==}
+  '@0xsequence/wallet-widget@0.0.0-20251127150140':
+    resolution: {integrity: sha512-tF8eHI5yYaDlqymZhz7n5EGjAdpKbro0p/lF6o7cAdEnFzf5hSIbIjJO3yJ6pHh3ft3sokuEFIV6UXh7Wwgt7Q==}
     peerDependencies:
       '@0xsequence/api': '>=2.3.23'
-      '@0xsequence/checkout': 0.0.0-20251127100747
-      '@0xsequence/connect': 0.0.0-20251127100747
-      '@0xsequence/hooks': 0.0.0-20251127100747
+      '@0xsequence/checkout': 0.0.0-20251127150140
+      '@0xsequence/connect': 0.0.0-20251127150140
+      '@0xsequence/hooks': 0.0.0-20251127150140
       '@0xsequence/indexer': '>=2.3.23'
       '@0xsequence/metadata': '>=2.3.23'
       '@0xsequence/network': '>=2.3.23'
@@ -5674,13 +5674,13 @@ snapshots:
       '@0xsequence/wallet': 2.3.35(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       ethers: 6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
 
-  '@0xsequence/checkout@0.0.0-20250924112110(pxanfdpttgcxzymrymivlsbnfu)':
+  '@0xsequence/checkout@0.0.0-20250924112110(cjzjw2igh7cedhhw5lizes5vsi)':
     dependencies:
       0xsequence: 2.3.35(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       '@0xsequence/api': 2.3.35
-      '@0xsequence/connect': 0.0.0-20251127100747(@emotion/is-prop-valid@0.8.8)(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))(wagmi@2.19.5(@tanstack/query-core@5.90.10)(@tanstack/react-query@5.90.10(react@18.3.1))(@types/react@18.3.27)(bufferutil@4.0.9)(fastestsmallesttextencoderdecoder@1.0.22)(react@18.3.1)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))(ws@7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@4.1.12))(zod@4.1.12)
+      '@0xsequence/connect': 0.0.0-20251127150140(@emotion/is-prop-valid@0.8.8)(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))(wagmi@2.19.5(@tanstack/query-core@5.90.10)(@tanstack/react-query@5.90.10(react@18.3.1))(@types/react@18.3.27)(bufferutil@4.0.9)(fastestsmallesttextencoderdecoder@1.0.22)(react@18.3.1)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))(ws@7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@4.1.12))(zod@4.1.12)
       '@0xsequence/design-system': 2.1.11(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(motion@12.23.24(@emotion/is-prop-valid@0.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@0xsequence/hooks': 0.0.0-20251127100747(@0xsequence/api@2.3.35)(@0xsequence/indexer@2.3.35)(@0xsequence/metadata@2.3.35)(@0xsequence/network@2.3.35(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(@tanstack/react-query@5.90.10(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))
+      '@0xsequence/hooks': 0.0.0-20251127150140(@0xsequence/api@2.3.35)(@0xsequence/indexer@2.3.35)(@0xsequence/metadata@2.3.35)(@0xsequence/network@2.3.35(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(@tanstack/react-query@5.90.10(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))
       '@0xsequence/indexer': 2.3.35
       '@0xsequence/marketplace': 2.3.35
       '@0xsequence/metadata': 2.3.35
@@ -5702,7 +5702,7 @@ snapshots:
       - '@types/react'
       - '@types/react-dom'
 
-  '@0xsequence/connect@0.0.0-20251127100747(@emotion/is-prop-valid@0.8.8)(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))(wagmi@2.19.5(@tanstack/query-core@5.90.10)(@tanstack/react-query@5.90.10(react@18.3.1))(@types/react@18.3.27)(bufferutil@4.0.9)(fastestsmallesttextencoderdecoder@1.0.22)(react@18.3.1)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))(ws@7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@4.1.12))(zod@4.1.12)':
+  '@0xsequence/connect@0.0.0-20251127150140(@emotion/is-prop-valid@0.8.8)(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))(wagmi@2.19.5(@tanstack/query-core@5.90.10)(@tanstack/react-query@5.90.10(react@18.3.1))(@types/react@18.3.27)(bufferutil@4.0.9)(fastestsmallesttextencoderdecoder@1.0.22)(react@18.3.1)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))(ws@7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@4.1.12))(zod@4.1.12)':
     dependencies:
       0xsequence: 2.3.35(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       '@0xsequence/api': 2.3.35
@@ -5711,7 +5711,7 @@ snapshots:
       '@0xsequence/dapp-client': https://codeload.github.com/0xsequence/sequence.js/tar.gz/6a3501096be6b465b65c034b648549c0b69f8990(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12)
       '@0xsequence/design-system': 2.1.11(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(motion@12.23.24(@emotion/is-prop-valid@0.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@0xsequence/ethauth': 1.0.0(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
-      '@0xsequence/hooks': 0.0.0-20251127100747(@0xsequence/api@2.3.35)(@0xsequence/indexer@2.3.35)(@0xsequence/metadata@2.3.35)(@0xsequence/network@2.3.35(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(@tanstack/react-query@5.90.10(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))
+      '@0xsequence/hooks': 0.0.0-20251127150140(@0xsequence/api@2.3.35)(@0xsequence/indexer@2.3.35)(@0xsequence/metadata@2.3.35)(@0xsequence/network@2.3.35(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(@tanstack/react-query@5.90.10(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))
       '@0xsequence/indexer': 2.3.35
       '@0xsequence/metadata': 2.3.35
       '@0xsequence/network': 2.3.35(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
@@ -5836,7 +5836,7 @@ snapshots:
       - typescript
       - zod
 
-  '@0xsequence/hooks@0.0.0-20251127100747(@0xsequence/api@2.3.35)(@0xsequence/indexer@2.3.35)(@0xsequence/metadata@2.3.35)(@0xsequence/network@2.3.35(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(@tanstack/react-query@5.90.10(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))':
+  '@0xsequence/hooks@0.0.0-20251127150140(@0xsequence/api@2.3.35)(@0xsequence/indexer@2.3.35)(@0xsequence/metadata@2.3.35)(@0xsequence/network@2.3.35(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(@tanstack/react-query@5.90.10(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))':
     dependencies:
       '@0xsequence/api': 2.3.35
       '@0xsequence/indexer': 2.3.35
@@ -5976,13 +5976,13 @@ snapshots:
       - typescript
       - zod
 
-  '@0xsequence/wallet-widget@0.0.0-20251127100747(qdgvndtui7hzjzfgetgjpgsrpi)':
+  '@0xsequence/wallet-widget@0.0.0-20251127150140(7tzdslnsapsachpwntfrg4eswa)':
     dependencies:
       '@0xsequence/api': 2.3.35
-      '@0xsequence/checkout': 0.0.0-20250924112110(pxanfdpttgcxzymrymivlsbnfu)
-      '@0xsequence/connect': 0.0.0-20251127100747(@emotion/is-prop-valid@0.8.8)(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))(wagmi@2.19.5(@tanstack/query-core@5.90.10)(@tanstack/react-query@5.90.10(react@18.3.1))(@types/react@18.3.27)(bufferutil@4.0.9)(fastestsmallesttextencoderdecoder@1.0.22)(react@18.3.1)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))(ws@7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@4.1.12))(zod@4.1.12)
+      '@0xsequence/checkout': 0.0.0-20250924112110(cjzjw2igh7cedhhw5lizes5vsi)
+      '@0xsequence/connect': 0.0.0-20251127150140(@emotion/is-prop-valid@0.8.8)(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))(wagmi@2.19.5(@tanstack/query-core@5.90.10)(@tanstack/react-query@5.90.10(react@18.3.1))(@types/react@18.3.27)(bufferutil@4.0.9)(fastestsmallesttextencoderdecoder@1.0.22)(react@18.3.1)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))(ws@7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@4.1.12))(zod@4.1.12)
       '@0xsequence/design-system': 2.1.11(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(motion@12.23.24(@emotion/is-prop-valid@0.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@0xsequence/hooks': 0.0.0-20251127100747(@0xsequence/api@2.3.35)(@0xsequence/indexer@2.3.35)(@0xsequence/metadata@2.3.35)(@0xsequence/network@2.3.35(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(@tanstack/react-query@5.90.10(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))
+      '@0xsequence/hooks': 0.0.0-20251127150140(@0xsequence/api@2.3.35)(@0xsequence/indexer@2.3.35)(@0xsequence/metadata@2.3.35)(@0xsequence/network@2.3.35(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(@tanstack/react-query@5.90.10(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.39.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.12))
       '@0xsequence/indexer': 2.3.35
       '@0xsequence/metadata': 2.3.35
       '@0xsequence/network': 2.3.35(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))

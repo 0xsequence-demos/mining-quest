@@ -47,12 +47,17 @@ export const Homepage: FC = () => {
 
   // Step 2: If a disconnect is flagged and wallets are loaded, perform it.
   useEffect(() => {
-    if (shouldDisconnect && wallets.length > 0) {
+    if (shouldDisconnect) {
+      localStorage.setItem("walletUrl", walletUrl);
+
+      if (wallets.length === 0) {
+        return;
+      }
+
       wallets.forEach((wallet) => {
         disconnectWallet(wallet.address);
       });
       // After disconnecting, update the stored URL and reset the flag.
-      localStorage.setItem("walletUrl", walletUrl);
       setShouldDisconnect(false);
       window.location.reload();
     }
