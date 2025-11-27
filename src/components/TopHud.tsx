@@ -12,11 +12,12 @@ type TopHudProps = {
   address?: `0x${string}`;
   demoMode: "play" | "mint";
   mintStatus: MintStatus;
-  disconnectWallet: (walletAddress: string) => Promise<void>;
+  disconnectWallets: () => Promise<void>;
 };
 
 export function TopHud(props: TopHudProps) {
-  const { gemsMinted, address, demoMode, mintStatus, disconnectWallet } = props;
+  const { gemsMinted, address, demoMode, mintStatus, disconnectWallets } =
+    props;
 
   const { setOpenWalletModal } = useOpenWalletModal();
   const [recentMint, setRecentMint] = useState(false);
@@ -115,7 +116,7 @@ export function TopHud(props: TopHudProps) {
             <ActionButton
               variant={demoMode}
               label="Disconnect"
-              onClick={() => disconnectWallet(address)}
+              onClick={() => disconnectWallets()}
             >
               <img src="/hud/logout@2x.webp" width="32" alt="" />
             </ActionButton>

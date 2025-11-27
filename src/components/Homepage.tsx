@@ -1,9 +1,10 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { Spinner } from "@0xsequence/design-system";
 import { useWallets, useOpenConnectModal } from "@0xsequence/connect";
 
 import {
   useAccount,
+  useChains,
   useWalletClient,
   useWriteContract,
   useReadContract,
@@ -68,6 +69,40 @@ export const Homepage: FC = () => {
 
   const chainId = useChainId();
   const { switchChainAsync } = useSwitchChain();
+  const chains = useChains();
+  const targetChain = useMemo(
+    () => chains.find((c) => c.id === demoNftContractChainId),
+    [chains]
+  );
+  const chainIdRef = useRef(chainId);
+  useEffect(() => {
+    chainIdRef.current = chainId;
+  }, [chainId]);
+
+  // Ensure the active wallet is on the correct network when it changes.
+  const chainSwitchAttemptedForAddressRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!address || chainId === demoNftContractChainId) {
+      chainSwitchAttemptedForAddressRef.current = null;
+      return;
+    }
+
+    if (!switchChainAsync) {
+      return;
+    }
+
+    // Avoid spamming switch requests for the same address if the user rejects.
+    if (chainSwitchAttemptedForAddressRef.current === address) {
+      return;
+    }
+
+    chainSwitchAttemptedForAddressRef.current = address;
+    switchChainAsync({ chainId: demoNftContractChainId }).catch((error) => {
+      console.error("Failed to switch chain after wallet change:", error);
+      // Allow a retry (e.g. if the user previously rejected)
+      chainSwitchAttemptedForAddressRef.current = null;
+    });
+  }, [address, chainId, switchChainAsync]);
 
   const {
     data: nftBalances,
@@ -87,7 +122,6 @@ export const Homepage: FC = () => {
 
   function parseGems(int: bigint) {
     const value = parseInt(int.toString());
-    console.log(value);
     return value < 10 ? `0${value.toString()}` : value.toString();
   }
 
@@ -97,11 +131,7 @@ export const Homepage: FC = () => {
       : 0n
   );
 
-  const {
-    data: mintTxnData,
-    isPending: isPendingMintTxn,
-    writeContractAsync,
-  } = useWriteContract();
+  const { writeContractAsync } = useWriteContract();
 
   const hasPickaxe =
     nftBalances instanceof Array &&
@@ -110,63 +140,202 @@ export const Homepage: FC = () => {
 
   const [tempGemsMoon, setTempGemsMoon] = useState(0);
   const [tempGemsSun, setTempGemsSun] = useState(0);
+  const [pendingMint, setPendingMint] = useState<{
+    ids: bigint[];
+    amts: bigint[];
+    requestId: number;
+  } | null>(null);
+  const pendingRequestIdRef = useRef<number | null>(null);
+  const processedRequestIdsRef = useRef<Set<number>>(new Set());
+  const mintRequestCounterRef = useRef(0);
+  const isMintingRef = useRef(false);
+  const waitForChainSync = useCallback(
+    async (targetId: number) => {
+      const maxAttempts = 10;
+      const delayMs = 300;
+      let lastWalletChain: number | null = null;
+
+      for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        const wagmiChain = chainIdRef.current;
+        if (wagmiChain === targetId) {
+          return { ok: true, walletChain: lastWalletChain ?? wagmiChain };
+        }
+
+        if (walletClient?.getChainId) {
+          try {
+            lastWalletChain = await walletClient.getChainId();
+            if (lastWalletChain === targetId) {
+              return { ok: true, walletChain: lastWalletChain };
+            }
+          } catch (err) {
+            console.error("Failed to read wallet chainId", err);
+          }
+        }
+
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
+      }
+
+      return {
+        ok: false,
+        walletChain: lastWalletChain ?? chainIdRef.current,
+      };
+    },
+    [walletClient]
+  );
 
   const runMintNFTs = async (itemIds: bigint[], itemAmts: bigint[]) => {
-    if (!walletClient) {
+    if (!address) {
+      console.warn("No active address; cannot mint.");
       return;
     }
 
-    // check if we're on the right chain
-    if (chainId !== demoNftContractChainId) {
-      try {
-        await switchChainAsync({ chainId: demoNftContractChainId });
-      } catch (e) {
-        console.error("Failed to switch chain:", e);
-      }
+    if (!targetChain) {
+      console.error(
+        "Target chain is not configured in wagmi:",
+        demoNftContractChainId
+      );
+      setMintStatus("failed");
+      return;
     }
-    const args = [itemIds, itemAmts];
-    console.log("batchMint args:", args);
-    try {
-      setMintStatus("pending");
-      await writeContractAsync({
-        address: demoNftContractAddress,
-        abi: NFT_ABI,
-        functionName: "batchMint",
-        args,
+
+    if (isMintingRef.current || pendingMint) {
+      console.warn("Mint already in progress, skipping duplicate request.", {
+        isMinting: isMintingRef.current,
+        pendingMint,
       });
-    } catch (error) {
-      console.error("Minting failed:", error);
-      // Type assertion to access error properties safely
-      const err = error as { cause?: { shortMessage?: string } };
-      // this error means wallet is not connected
-      if (err.cause?.shortMessage === "Transaction creation failed.") {
-        disconnectWallet(address as string);
-        setMintStatus("notStarted");
-      } else {
-        setMintStatus("failed");
-      }
+      return;
     }
+
+    const requestId = ++mintRequestCounterRef.current;
+    console.log("mint: request received", {
+      requestId,
+      itemIds: itemIds.map((i) => i.toString()),
+      itemAmts: itemAmts.map((a) => a.toString()),
+      chainId,
+    });
+    setMintStatus("pending");
+    setPendingMint({ ids: itemIds, amts: itemAmts, requestId });
   };
 
   const [mintStatus, setMintStatus] = useState<MintStatus>("notStarted");
 
-  // Handle mint transaction status changes
+  // Once chain is correct and a mint is queued, perform the write.
   useEffect(() => {
-    if (isPendingMintTxn) {
-      setMintStatus("pending");
-    } else if (mintTxnData) {
-      // add a bit of delay before setting the demo mode to play
-      setTimeout(async () => {
-        await refetchNftBalances();
-
-        setMintStatus("success");
-      }, 500);
-    } else if (!isPendingMintTxn && !mintTxnData && mintStatus === "pending") {
-      // If we were pending but now we're not, and there's no transaction data, it failed
-      console.warn("mint failed?");
+    if (!pendingMint) return;
+    if (!targetChain) {
+      console.error("Target chain missing when trying to mint.");
       setMintStatus("failed");
+      setPendingMint(null);
+      return;
     }
-  }, [isPendingMintTxn, mintTxnData, mintStatus, refetchNftBalances]);
+    if (processedRequestIdsRef.current.has(pendingMint.requestId)) {
+      return;
+    }
+    if (pendingRequestIdRef.current === pendingMint.requestId) {
+      // Already processing this request (guards against React StrictMode double-invoke).
+      return;
+    }
+    if (isMintingRef.current) return;
+    if (!address) {
+      console.error("No address when trying to mint after chain switch.");
+      setMintStatus("failed");
+      setPendingMint(null);
+      return;
+    }
+
+    const run = async () => {
+      isMintingRef.current = true;
+      pendingRequestIdRef.current = pendingMint.requestId;
+      processedRequestIdsRef.current.add(pendingMint.requestId);
+      const args = [pendingMint.ids, pendingMint.amts] as const;
+      console.log("mint: starting", {
+        requestId: pendingMint.requestId,
+        args: {
+          ids: args[0].map((i) => i.toString()),
+          amts: args[1].map((a) => a.toString()),
+        },
+        currentChain: chainIdRef.current,
+        targetChain: targetChain.id,
+      });
+      try {
+        setMintStatus("pending");
+        if (!switchChainAsync) {
+          throw new Error(
+            "switchChainAsync is not available; please switch networks in your wallet."
+          );
+        }
+
+        const switched = await switchChainAsync({ chainId: targetChain.id });
+        if (switched && switched.id !== targetChain.id) {
+          throw new Error(
+            `Switch chain completed but ended on the wrong chain: ${switched.id}`
+          );
+        }
+
+        const waitResult = await waitForChainSync(targetChain.id);
+        console.log("mint: chain check", {
+          requestId: pendingMint.requestId,
+          wagmiChain: chainIdRef.current,
+          walletChain: waitResult.walletChain,
+          targetChain: targetChain.id,
+          ok: waitResult.ok,
+        });
+        if (!waitResult.ok) {
+          throw new Error(
+            `Wallet still on chain ${waitResult.walletChain} after switch, expected ${targetChain.id}`
+          );
+        }
+
+        const txHash = await writeContractAsync({
+          address: demoNftContractAddress,
+          abi: NFT_ABI,
+          functionName: "batchMint",
+          args,
+          chainId: targetChain.id,
+          chain: targetChain,
+          account: address,
+        });
+        console.log("mint: tx sent", { requestId: pendingMint.requestId, txHash });
+
+        // Give the indexer a moment before checking balances again.
+        setTimeout(async () => {
+          await refetchNftBalances();
+          setMintStatus("success");
+          console.log("mint: success", { requestId: pendingMint.requestId });
+        }, 500);
+      } catch (error) {
+        console.error("Minting failed:", {
+          requestId: pendingMint.requestId,
+          error,
+        });
+        // Type assertion to access error properties safely
+        const err = error as { cause?: { shortMessage?: string } };
+        // this error means wallet is not connected
+        if (err.cause?.shortMessage === "Transaction creation failed.") {
+          disconnectWallet(address as string);
+          setMintStatus("notStarted");
+        } else {
+          setMintStatus("failed");
+        }
+      } finally {
+        isMintingRef.current = false;
+        pendingRequestIdRef.current = null;
+        setPendingMint(null);
+        console.log("mint: cleaned up", { requestId: pendingMint.requestId });
+      }
+    };
+
+    run();
+  }, [
+    pendingMint,
+    targetChain,
+    writeContractAsync,
+    refetchNftBalances,
+    address,
+    disconnectWallet,
+    switchChainAsync,
+    waitForChainSync,
+  ]);
 
   // Set demo mode based on pickaxe ownership
   useEffect(() => {
@@ -222,7 +391,11 @@ export const Homepage: FC = () => {
                 address={address}
                 demoMode={demoMode}
                 mintStatus={mintStatus}
-                disconnectWallet={disconnectWallet}
+                disconnectWallets={async () => {
+                  await Promise.all(
+                    wallets.map((wallet) => disconnectWallet(wallet.address))
+                  );
+                }}
               />
               <View3D env={demoMode === "play" ? "mine" : "item"}>
                 {demoMode === "play" ? (
