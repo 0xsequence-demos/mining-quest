@@ -140,4 +140,6 @@ export const config = createConfig({
   },
   google: true,
   explicitSessionParams: explicitSession,
+  nodesUrl: "https://dev-nodes.sequence.app/{network}",
+  relayerUrl: "https://dev-{network}-relayer.sequence.app",
 });
