@@ -131,15 +131,18 @@ export const config = createConfig({
   email: true,
   apple: true,
   passkey: true,
-  // signIn: {
-  //   descriptiveSocials: true,
-  //   disableTooltipForDescriptiveSocials: true,
-  // },
   walletConnect: {
     projectId: walletConnectProjectId,
   },
   google: true,
   explicitSessionParams: explicitSession,
+  env: {
+    indexerGatewayUrl: "https://dev-indexer.sequence.app",
+    metadataUrl: "https://dev-metadata.sequence.app",
+    apiUrl: "https://dev-api.sequence.app",
+    indexerUrl: "https://dev-indexer.sequence.app",
+    builderUrl: "https://dev-api.sequence.build",
+  },
   nodesUrl: "https://dev-nodes.sequence.app/{network}",
   relayerUrl: "https://dev-{network}-relayer.sequence.app",
 });
