@@ -1,3 +1,10 @@
+<!-- archived-repository-notice -->
+> [!WARNING]
+> **This demo is archived and no longer maintained.**
+>
+> It was built against Sequence APIs and SDKs that may have changed or been
+> retired, so it may no longer run. It is kept here for reference only.
+
 # Mining Quest
 
 A 3D mining game demo built with React Three Fiber and Sequence Wallet Kit.
